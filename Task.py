@@ -3,23 +3,14 @@
 import time
 
 import Scene
+import Widget
 
 
-class ChapterTask:
-    def __init__(self, window, chapter, subChapter):
+class C03S04Task:
+    def __init__(self, window):
         self.window = window
-        self.chapter = chapter
-        self.subChapter = subChapter
 
     def run(self):
-        mainScene = Scene.MainScene(self.window)
-        if mainScene.match():
-            if mainScene.weighAnchor():
-                mainScene = None
-
-                time.sleep(3)
-
-                precombatScene = Scene.PrecombatScene(self.window)
-                if precombatScene.match():
-                    while True:
-                        precombatScene.prevChapter()
+        c03s04Button = Widget.Button(self.window, "3-4按钮", "./Precombat/C03S04.png")
+        if c03s04Button.match():
+            c03s04Button.click()
