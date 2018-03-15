@@ -21,7 +21,7 @@ class Widget:
                 raise Exception("掩码格式错误：请将掩码保存为32位色。\n{0}".format(maskFile))
         self.location = None
 
-    def match(self, similarity=0.95, timeout=15.0):
+    def match(self, timeout=15.0, similarity=0.95):
         print("正在匹配{0}……".format(self.name))
         self.location = None
         beginTime = time.time()
