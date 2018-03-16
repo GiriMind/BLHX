@@ -20,7 +20,7 @@ class C03S04Task:
             if lkqwButton.match():
                 lkqwButton.click()
                 time.sleep(self.delay)
-                if lkqwButton.match():
+                if lkqwButton.match(0.98):
                     lkqwButton.click()
                     lkqwButton = None
                     time.sleep(self.delay)

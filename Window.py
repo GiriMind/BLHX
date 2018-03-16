@@ -1,5 +1,6 @@
 # coding: utf-8
 
+import random
 import win32gui
 import pyautogui
 
@@ -12,14 +13,12 @@ class DesktopWindow:
         self.hWnd = win32gui.FindWindow(None, name)
         if self.hWnd == 0:
             raise Exception("{0} 窗口未找到。".format(name))
-
         self.capturer = gc.DesktopCapturer()
         self.image = gc.Image()
         self.rect = gc.Rect()
 
     def capture(self):
         left, top, right, bottom = win32gui.GetWindowRect(self.hWnd)
-
         self.rect.x = left
         self.rect.y = top
         self.rect.width = right - left
@@ -36,7 +35,7 @@ class DesktopWindow:
         return self.image
 
     def click(self, location, size):
-        x = location.x + size.width / 2
-        y = location.y + size.height / 2
-        pyautogui.moveTo(self.rect.x + x, self.rect.y + y)
+        x = self.rect.x + location.x + random.randint(0, size.width - 1)
+        y = self.rect.y + location.y + random.randint(0, size.height - 1)
+        pyautogui.moveTo(x, y)
         pyautogui.click()
