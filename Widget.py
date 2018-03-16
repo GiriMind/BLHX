@@ -21,23 +21,29 @@ class Widget:
                 raise Exception("掩码格式错误：请将掩码保存为32位色。\n{0}".format(maskFile))
         self.location = None
 
-    def match(self, timeout=15.0, similarity=0.95):
-        print("正在匹配{0}……".format(self.name))
+    def matchOn(self, image, similarity=0.99):
         self.location = None
+        if self.mask is None:
+            result = image.matchTemplate(self.image, Image.TM_CCOEFF_NORMED)
+        else:
+            result = image.matchTemplate(self.image, Image.TM_CCORR_NORMED, self.mask)
+        minMaxLoc = result.minMaxLoc()
+        if minMaxLoc.maxVal > similarity:
+            self.location = minMaxLoc.maxLoc
+            print("匹配到{0}，相似度是{1}。".format(self.name, minMaxLoc.maxVal))
+            return True
+        else:
+            return False
+
+    def match(self, timeout=15.0, similarity=0.99):
+        print("正在匹配{0}……".format(self.name))
         beginTime = time.time()
         while time.time() - beginTime < timeout:
             image = self.window.capture()
             if image is None:
                 time.sleep(0.5)
                 continue
-            if self.mask is None:
-                result = image.matchTemplate(self.image, Image.TM_CCORR_NORMED)  # TM_CCOEFF_NORMED
-            else:
-                result = image.matchTemplate(self.image, Image.TM_CCORR_NORMED, self.mask)
-            minMaxLoc = result.minMaxLoc()
-            if minMaxLoc.maxVal > similarity:
-                self.location = minMaxLoc.maxLoc
-                print("匹配到{0}，相似度是{1}。".format(self.name, minMaxLoc.maxVal))
+            if self.matchOn(image, similarity):
                 return True
         print("匹配{0}失败。".format(self.name))
         return False

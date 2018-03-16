@@ -7,7 +7,7 @@ import GraphCap as gc
 import Image
 
 
-class Window:
+class DesktopWindow:
     def __init__(self, name):
         self.hWnd = win32gui.FindWindow(None, name)
         if self.hWnd == 0:

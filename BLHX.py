@@ -7,7 +7,7 @@ import Task
 
 
 def BLHX():
-    window = Window.Window("BlueStacks")
+    window = Window.DesktopWindow("BlueStacks")
     task = Task.C03S04Task(window)
     print("脚本开始。")
     try:
