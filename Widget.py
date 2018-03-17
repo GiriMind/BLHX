@@ -33,7 +33,7 @@ class Widget:
             print("匹配到{0}，相似度是{1}。".format(self.name, minMaxLoc.maxVal))
             return True
         else:
-            #print("匹配不到{0}，相似度是{1}。".format(self.name, minMaxLoc.maxVal))
+            print("匹配不到{0}，相似度是{1}。".format(self.name, minMaxLoc.maxVal))
             return False
 
     def match(self, similarity=0.99, timeout=15.0):
