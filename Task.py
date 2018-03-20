@@ -6,7 +6,6 @@ import Scene
 class C03S04Task:
     def __init__(self, window):
         self.window = window
-        self.delay = 2.0
 
     def run(self):
         precombatScene = Scene.PrecombatScene(self.window)

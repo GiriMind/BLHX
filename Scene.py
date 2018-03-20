@@ -26,7 +26,7 @@ class Scene:
 
 class PrecombatScene(Scene):
     def __init__(self, window):
-        super().__init__(self.window)
+        super().__init__(window)
         self.delay = 2.0
 
     def enterC03S04(self):
@@ -45,7 +45,7 @@ class PrecombatScene(Scene):
 
 class C03S04Scene(Scene):
     def __init__(self, window):
-        super().__init__(self.window)
+        super().__init__(window)
         self.delay = 2.0
 
     def enterBattle(self):
