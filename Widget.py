@@ -5,18 +5,18 @@ import GraphCapCon as gcc
 
 
 class Template:
-    def __init__(self, window, name, imageFile, maskFile=None):
+    def __init__(self, window, name, imageName, maskName=None):
         self.window = window
         self.name = name
-        self.image = gc.Image(imageFile, gcc.IMREAD_UNCHANGED)
+        self.image = gc.Image(imageName, gcc.IMREAD_UNCHANGED)
         if self.image.type() != gcc.CV_8UC4:
-            raise Exception("图片格式错误：请将图片保存为32位色。\n{0}".format(imageFile))
-        if maskFile is None:
+            raise Exception("图片格式错误：请将图片保存为32位色。\n{0}".format(imageName))
+        if maskName is None:
             self.mask = None
         else:
-            self.mask = gc.Image(maskFile, gcc.IMREAD_UNCHANGED)
+            self.mask = gc.Image(maskName, gcc.IMREAD_UNCHANGED)
             if self.mask.type() != gcc.CV_8UC4:
-                raise Exception("掩码格式错误：请将掩码保存为32位色。\n{0}".format(maskFile))
+                raise Exception("掩码格式错误：请将掩码保存为32位色。\n{0}".format(maskName))
 
     def matchSingleOn(self, image, similarity=0.99):
         if self.mask is None:
