@@ -8,7 +8,13 @@ import Task
 
 def BLHX():
     random.seed()
-    window = Window.DesktopWindow("BlueStacks")
+
+    window = Window.DesktopWindow()
+    while True:
+        image = window.capture()
+        if image is not None:
+            image.show("test")
+
     task = Task.C03S04Task(window)
     print("脚本开始。")
     try:
