@@ -58,4 +58,4 @@ class Target:
         self.size = size
 
     def click(self):
-        self.window.click(self.location, self.size())
+        self.window.click(self.location, self.size)
