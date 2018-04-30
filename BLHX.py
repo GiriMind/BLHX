@@ -2,6 +2,7 @@
 
 import random
 
+import GraphCap as gc
 import Window
 import Task
 
@@ -14,6 +15,7 @@ def BLHX():
         image = window.capture()
         if image is not None:
             image.show("test")
+            gc.Utils.WaitKey(1)
 
     task = Task.C03S04Task(window)
     print("脚本开始。")

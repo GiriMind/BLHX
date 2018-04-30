@@ -15,7 +15,7 @@ class DesktopWindow:
         #    raise Exception("{0} 窗口未找到。".format("BlueStacks"))
 
         print("正在枚举窗口……")
-        windowList = gc.EnumWindows()
+        windowList = gc.Window.EnumWindows()
         for i in range(len(windowList)):
             window = windowList[i]
             print("{0}.[{1}]{2}".format(i + 1, window.getPid(), window.getName()))
@@ -40,7 +40,7 @@ class DesktopWindow:
         if not self.capturer.capture(self.image, self.rect):
             print("捕获图像失败：桌面超时未更新，或者窗口位置错误。")
             return None
-        if self.image.type() != gcc.CV_8UC4:
+        if self.image.type() != gcc.IT_8UC4:
             raise Exception("图像格式错误：请将桌面设置为32位色。")
         # print("捕获位置：x={0}, y={1}, width={2}, height={3}".format(
         #    self.rect.x, self.rect.y, self.rect.width, self.rect.height))

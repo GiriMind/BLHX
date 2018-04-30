@@ -9,18 +9,19 @@ class Scene:
     def __init__(self, window):
         self.window = window
 
-    def matchSingle(self, template, similarity=0.99, timeout=15.0):
-        print("正在匹配{0}……".format(template.name))
+    def matchSingle(self, template, threshold=0.99, timeout=15.0):
+        print("正在匹配[{0}]……".format(template.name))
         beginTime = time.time()
         while time.time() - beginTime < timeout:
             image = self.window.capture()
             if image is None:
                 time.sleep(0.5)
                 continue
-            target = template.matchSingleOn(image, similarity)
+            target = template.matchSingleOn(image, threshold)
             if target is not None:
+                print("匹配[{0}]成功。".format(template.name))
                 return target
-        print("匹配{0}失败。".format(template.name))
+        print("匹配[{0}]失败。".format(template.name))
         return None
 
 
