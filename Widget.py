@@ -10,14 +10,14 @@ class Template:
         self.name = name
         self.image = gc.Image()
         self.image.read(imageName, gcc.RF_UNCHANGED)
-        if self.image.type() != gcc.IT_8UC4:
+        if self.image.getType() != gcc.IT_8UC4:
             raise Exception("图片格式错误：请将图片保存为32位色。\n{0}".format(imageName))
         if maskName is None:
             self.mask = None
         else:
             self.mask = gc.Image()
             self.mask.read(maskName, gcc.RF_UNCHANGED)
-            if self.mask.type() != gcc.IT_8UC4:
+            if self.mask.getType() != gcc.IT_8UC4:
                 raise Exception("掩码格式错误：请将掩码保存为32位色。\n{0}".format(maskName))
 
     def matchSingleOn(self, image, threshold=0.99):
@@ -28,7 +28,7 @@ class Template:
         minMaxLoc = result.minMaxLoc()
         if minMaxLoc.maxVal > threshold:
             print("匹配到[{0}]，相似度是{1}。".format(self.name, minMaxLoc.maxVal))
-            return Target(self.window, minMaxLoc.maxLoc, self.image.size())
+            return Target(self.window, minMaxLoc.maxLoc, self.image.getSize())
         else:
             print("匹配不到[{0}]，相似度是{1}。".format(self.name, minMaxLoc.maxVal))
             return None
@@ -43,11 +43,11 @@ class Template:
             minMaxLoc = result.minMaxLoc()
             if minMaxLoc.maxVal > threshold:
                 print("匹配到[{0}]，相似度是{1}。".format(self.name, minMaxLoc.maxVal))
-                targetList.append(Target(self.window, minMaxLoc.maxLoc, self.image.size()))
+                targetList.append(Target(self.window, minMaxLoc.maxLoc, self.image.getSize()))
             else:
                 print("匹配不到[{0}]，相似度是{1}。".format(self.name, minMaxLoc.maxVal))
                 break
-            result.eraseMaxLoc(minMaxLoc, self.image.size())
+            result.eraseMaxLoc(minMaxLoc, self.image.getSize())
         return targetList
 
 
