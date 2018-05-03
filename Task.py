@@ -8,7 +8,10 @@ class C03S04Task:
         self.window = window
 
     def run(self):
-        precombatScene = Scene.PrecombatScene(self.window)
-        precombatScene.enterC03S04()
-        c03s04Scene = Scene.C03S04Scene(self.window)
-        c03s04Scene.enterBattle()
+        precombat = Scene.PrecombatScene(self.window)
+        c03s04 = Scene.C03S04Scene(self.window)
+        battle = Scene.BattleScene(self.window)
+        while True:
+            precombat.enterC03S04()
+            c03s04.enterBattle()
+            battle.leaveBattle()
