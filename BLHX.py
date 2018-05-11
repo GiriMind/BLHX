@@ -17,12 +17,9 @@ def BLHX():
     #        image.show("test")
     #        gc.Utils.WaitKey(1)
 
-    task = Task.C03S04Task(window)
     print("脚本开始。")
-    # try:
+    task = Task.C03S04Task(window)
     task.run()
-    # except Exception as e:
-    #    print(e)
     print("脚本结束。")
 
 

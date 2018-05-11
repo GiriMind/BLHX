@@ -13,5 +13,6 @@ class C03S04Task:
         battle = Scene.BattleScene(self.window)
         while True:
             precombat.enterC03S04()
-            c03s04.enterBattle()
-            battle.leaveBattle()
+            while c03s04.bossExist:
+                c03s04.enterBattle()
+                battle.leaveBattle()
