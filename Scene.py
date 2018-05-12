@@ -4,8 +4,8 @@ import time
 import random
 
 import GraphCap as gc
-import GraphCapCon as gcc
 import Widget
+
 
 class Scene:
     def __init__(self, window):
@@ -26,18 +26,18 @@ class Scene:
         print("匹配[{0}]超时。".format(button.name))
         return None
 
-    def matchMulti(self, template, timeout, threshold):
-        print("{0}秒内匹配[{1}]……".format(timeout, template.name))
+    def matchEnemy(self, enemy, timeout, threshold):
+        print("{0}秒内匹配[{1}]……".format(timeout, enemy.name))
         beginTime = time.time()
         while time.time() - beginTime < timeout:
             image = self.window.capture()
             if image is None:
                 time.sleep(0.5)
                 continue
-            targetList = template.matchMultiOn(image, threshold)
+            targetList = enemy.match(image, threshold)
             if len(targetList) > 0:
                 return targetList
-        print("匹配[{0}]超时。".format(template.name))
+        print("匹配[{0}]超时。".format(enemy.name))
         return []
 
     def sleep(self):
@@ -51,7 +51,7 @@ class PrecombatScene(Scene):
         self.lkqwBtn = Widget.Button(self.window, "立刻前往", "./Precombat/LKQW.png")
 
     def enterC03S04(self):
-        c03s04Target = self.matchButton(self.c03s04Btn, 5.0, 0.92)
+        c03s04Target = self.matchButton(self.c03s04Btn, 5.0, 0.98)
         if c03s04Target is not None:
             c03s04Target.click()
             self.sleep()
@@ -70,11 +70,11 @@ class PrecombatScene(Scene):
 class C03S04Scene(Scene):
     def __init__(self, window):
         super().__init__(window)
-        self.zljdTempl = Widget.Template(self.window, "主力舰队", "./SubChapter/ZLJD.png", "./SubChapter/ZLJDMask.png")
+        self.zljdEnemy = Widget.Enemy(self.window, "主力舰队", "./SubChapter/ZLJD.png", "./SubChapter/ZLJDMask.png")
         self.weighAnchorBtn = Widget.Button(self.window, "出击", "./SubChapter/WeighAnchor.png")
 
     def enterBattle(self):
-        zljdTargetList = self.matchMulti(self.zljdTempl, 5.0, 0.98)
+        zljdTargetList = self.matchEnemy(self.zljdEnemy, 5.0, 0.98)
         if len(zljdTargetList) > 0:
             zljdTargetList[0].click()
             self.sleep()

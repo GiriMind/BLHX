@@ -44,6 +44,6 @@ class DesktopWindow:
     def click(self, location, size):
         x = self.rect.x + location.x + random.randint(0, size.width - 1)
         y = self.rect.y + location.y + random.randint(0, size.height - 1)
-        self.input.mouseMove(gc.Point(x, y))
+        self.input.setMousePos(gc.Point(x, y))
         self.input.mouseLeftDown()
         self.input.mouseLeftUp()
