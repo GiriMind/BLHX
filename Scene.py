@@ -40,8 +40,8 @@ class Scene:
         print("匹配[{0}]超时。".format(enemy.name))
         return []
 
-    def sleep(self):
-        time.sleep(random.uniform(1.0, 3.0))
+    def sleep(self, min=1.0, max=3.0):
+        time.sleep(random.uniform(min, max))
 
 
 class PrecombatScene(Scene):
@@ -49,22 +49,38 @@ class PrecombatScene(Scene):
         super().__init__(window)
         self.c03s04Button = Widget.Button(self.window, "3-4", "./Precombat/C03S04.png")
         self.goNowButton = Widget.Button(self.window, "立刻前往", "./Precombat/GoNow.png")
+        self.goNow2Button = Widget.Button(self.window, "立刻前往2", "./Precombat/GoNow2.png")
 
     def enterC03S04(self):
-        c03s04Target = self.matchButton(self.c03s04Button, 5.0, 0.98)
-        if c03s04Target is not None:
-            c03s04Target.click()
-            self.sleep()
+        c03s04Target = None
+        goNowTarget = None
+        goNow2Target = None
+        while True:
+            image = self.window.capture()
+            if image is None:
+                time.sleep(0.1)
+                continue
 
-            goNowTarget = self.matchButton(self.goNowButton, 5.0, 0.98)
-            if goNowTarget is not None:
-                goNowTarget.click()
-                self.sleep()
+            if c03s04Target is None:
+                c03s04Target = self.c03s04Button.match(image, 0.97)
+                if c03s04Target is not None:
+                    c03s04Target.click()
+                    self.sleep()
+                continue
 
-                goNowTarget = self.matchButton(self.goNowButton, 5.0, 0.98)
+            if goNowTarget is None:
+                goNowTarget = self.goNowButton.match(image)
                 if goNowTarget is not None:
                     goNowTarget.click()
                     self.sleep()
+                continue
+
+            if goNow2Target is None:
+                goNow2Target = self.goNow2Button.match(image)
+                if goNow2Target is not None:
+                    goNow2Target.click()
+                    self.sleep()
+                    break
 
 
 class C03S04Scene(Scene):
@@ -72,22 +88,52 @@ class C03S04Scene(Scene):
         super().__init__(window)
         self.recFleetEnemy = Widget.Enemy(self.window, "侦查舰队", "./SubChapter/RecFleet.png",
                                           "./SubChapter/RecFleetMask.png")
-        self.airFleetEnemy = Widget.Enemy(self.window, "航空舰队", "./SubChapter/AirFleet.png",
-                                          "./SubChapter/AirFleetMask.png")
         self.mainFleetEnemy = Widget.Enemy(self.window, "主力舰队", "./SubChapter/MainFleet.png",
                                            "./SubChapter/MainFleetMask.png")
+        self.airFleetEnemy = Widget.Enemy(self.window, "航空舰队", "./SubChapter/AirFleet.png",
+                                          "./SubChapter/AirFleetMask.png")
         self.weighAnchorButton = Widget.Button(self.window, "出击", "./SubChapter/WeighAnchor.png")
 
     def enterBattle(self):
-        zljdTargetList = self.matchEnemy(self.mainFleetEnemy, 5.0, 0.98)
-        if len(zljdTargetList) > 0:
-            zljdTargetList[0].click()
-            self.sleep()
+        while True:
+            image = self.window.capture()
+            if image is None:
+                time.sleep(0.1)
+                continue
 
-            weighAnchorTarget = self.matchButton(self.weighAnchorButton, 5.0, 0.98)
-            if weighAnchorTarget is not None:
-                weighAnchorTarget.click()
+            recFleetTargetList = self.recFleetEnemy.match(image)
+            mainFleetTargetList = self.mainFleetEnemy.match(image)
+            airFleetTargetList = self.airFleetEnemy.match(image)
+
+            display = image.clone()
+            for recFleetTarget in recFleetTargetList:
+                display.rectangle(gc.Rect(recFleetTarget.location, recFleetTarget.size), gc.Scalar(255, 0, 0))
+            for mainFleetTarget in mainFleetTargetList:
+                display.rectangle(gc.Rect(mainFleetTarget.location, mainFleetTarget.size), gc.Scalar(255, 0, 0))
+            for airFleetTarget in airFleetTargetList:
+                display.rectangle(gc.Rect(airFleetTarget.location, airFleetTarget.size), gc.Scalar(255, 0, 0))
+            display.show("display")
+            gc.Utils.WaitKey(1)
+
+            print(len(recFleetTargetList))
+            print(len(mainFleetTargetList))
+            print(len(airFleetTargetList))
+            if len(recFleetTargetList) > 0:
+                recFleetTargetList[0].click()
                 self.sleep()
+            else:
+                if len(mainFleetTargetList) > 0:
+                    mainFleetTargetList[0].click()
+                    self.sleep()
+                else:
+                    if len(airFleetTargetList) > 0:
+                        airFleetTargetList[0].click()
+                        self.sleep()
+
+            # weighAnchorTarget = self.weighAnchorButton.match(image)
+            # if weighAnchorTarget is not None:
+            #    weighAnchorTarget.click()
+            #    self.sleep()
 
 
 class BattleScene(Scene):

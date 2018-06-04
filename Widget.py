@@ -13,8 +13,8 @@ class Button:
         if self.templ.getType() != gcc.IT_8UC4:
             raise Exception("图片格式错误：请将图片保存为32位色。\n{0}".format(templName))
 
-    def match(self, image, threshold):
-        result = image.matchTemplate(self.templ, gcc.TM_CCOEFF_NORMED)
+    def match(self, image, threshold=0.98):
+        result = image.matchTemplate(self.templ, gcc.MTM_CCOEFF_NORMED)
         minMaxLoc = result.minMaxLoc()
         if minMaxLoc.maxVal > threshold:
             print("匹配[{0}]成功，相似度是{1}。".format(self.name, minMaxLoc.maxVal))
@@ -35,23 +35,20 @@ class Enemy:
         self.mask = gc.Image()
         self.mask.read(maskName, gcc.RF_UNCHANGED)
         if self.mask.getType() != gcc.IT_8UC4:
-            raise Exception("掩码格式错误：请将掩码保存为32位色。\n{0}".format(maskName))
+            raise Exception("图片格式错误：请将图片保存为32位色。\n{0}".format(maskName))
 
-    def canny(self, threshold1=100.0, threshold2=200.0):
-        self.templ = self.templ.canny(threshold1, threshold2)
-
-    def match(self, image, threshold):
-        result = image.matchTemplate(self.templ, gcc.TM_CCORR_NORMED, self.mask)
+    def match(self, image, threshold=0.98):
+        result = image.matchTemplate(self.templ, gcc.MTM_CCORR_NORMED, self.mask)
         targetList = []
         while True:
             minMaxLoc = result.minMaxLoc()
             if minMaxLoc.maxVal > threshold:
-                print("匹配[{0}]成功，相似度是{1}。".format(self.name, minMaxLoc.maxVal))
+                # print("匹配[{0}]成功，相似度是{1}。".format(self.name, minMaxLoc.maxVal))
                 targetList.append(Target(self.window, minMaxLoc.maxLoc, self.templ.getSize()))
             else:
-                print("匹配[{0}]失败，相似度是{1}。".format(self.name, minMaxLoc.maxVal))
+                # print("匹配[{0}]失败，相似度是{1}。".format(self.name, minMaxLoc.maxVal))
                 break
-            result.eraseMaxLoc(minMaxLoc, self.templ.getSize())
+            result.floodFill(minMaxLoc.maxLoc, gc.Scalar(0.0))
         return targetList
 
 
