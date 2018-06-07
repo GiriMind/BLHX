@@ -4,17 +4,27 @@ import GraphCap as gc
 import GraphCapCon as gcc
 
 
-class Button:
-    def __init__(self, window, name, templName):
+class Template:
+    def __init__(self, window, name, templName, maskName=None):
         self.window = window
         self.name = name
         self.templ = gc.Image()
         self.templ.read(templName, gcc.RF_UNCHANGED)
         if self.templ.getType() != gcc.IT_8UC4:
-            raise Exception("图片格式错误：请将图片保存为32位色。\n{0}".format(templName))
+            raise Exception("模板图片格式错误：请保存为32位色。\n{0}".format(templName))
+        if maskName is None:
+            self.mask = None
+        else:
+            self.mask = gc.Image()
+            self.mask.read(maskName, gcc.RF_UNCHANGED)
+            if self.mask.getType() != gcc.IT_8UC4:
+                raise Exception("掩码图片格式错误：请保存为32位色。\n{0}".format(maskName))
 
-    def match(self, image, threshold=0.98):
-        result = image.matchTemplate(self.templ, gcc.MTM_CCOEFF_NORMED)
+    def matchOn(self, image, threshold=0.98):
+        if self.mask is None:
+            result = image.matchTemplate(self.templ, gcc.MTM_CCOEFF_NORMED)
+        else:
+            result = image.matchTemplate(self.templ, gcc.MTM_CCORR_NORMED, self.mask)
         minMaxLoc = result.minMaxLoc()
         if minMaxLoc.maxVal > threshold:
             print("匹配[{0}]成功，相似度是{1}。".format(self.name, minMaxLoc.maxVal))
@@ -23,22 +33,11 @@ class Button:
             print("匹配[{0}]失败，相似度是{1}。".format(self.name, minMaxLoc.maxVal))
             return None
 
-
-class Enemy:
-    def __init__(self, window, name, templName, maskName):
-        self.window = window
-        self.name = name
-        self.templ = gc.Image()
-        self.templ.read(templName, gcc.RF_UNCHANGED)
-        if self.templ.getType() != gcc.IT_8UC4:
-            raise Exception("图片格式错误：请将图片保存为32位色。\n{0}".format(templName))
-        self.mask = gc.Image()
-        self.mask.read(maskName, gcc.RF_UNCHANGED)
-        if self.mask.getType() != gcc.IT_8UC4:
-            raise Exception("图片格式错误：请将图片保存为32位色。\n{0}".format(maskName))
-
-    def match(self, image, threshold=0.98):
-        result = image.matchTemplate(self.templ, gcc.MTM_CCORR_NORMED, self.mask)
+    def matchMultiOn(self, image, threshold=0.98):
+        if self.mask is None:
+            result = image.matchTemplate(self.templ, gcc.MTM_CCOEFF_NORMED)
+        else:
+            result = image.matchTemplate(self.templ, gcc.MTM_CCORR_NORMED, self.mask)
         targetList = []
         while True:
             minMaxLoc = result.minMaxLoc()

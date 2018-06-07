@@ -34,10 +34,8 @@ class DesktopWindow:
         # print("捕获位置：x={0}, y={1}, width={2}, height={3}".format(
         #    self.rect.x, self.rect.y, self.rect.width, self.rect.height))
         dsize = gc.Size(974, 634)
-        if self.rect.width != dsize.width and self.rect.height != dsize.height:
-            # print("调整捕获的图像大小至(974,634)。")
-            dimage = self.image.resize(dsize)
-            return dimage
+        if self.rect.width != dsize.width or self.rect.height != dsize.height:
+            return self.image.resize(dsize)
         else:
             return self.image
 

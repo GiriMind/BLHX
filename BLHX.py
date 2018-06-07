@@ -18,7 +18,7 @@ def BLHX():
     #        gc.Utils.WaitKey(1)
 
     print("脚本开始。")
-    task = Task.C03S04Task(window)
+    task = Task.ExerciseTask(window)
     task.run()
     print("脚本结束。")
 
