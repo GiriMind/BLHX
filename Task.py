@@ -32,6 +32,7 @@ class C03S04Task(Task):
         self.window = window
 
     def run(self):
+        mainScene = Scene.MainScene(self.window)
         precombatScene = Scene.PrecombatScene(self.window)
         c03s04Scene = Scene.C03S04Scene(self.window)
         battleScene = Scene.BattleScene(self.window)

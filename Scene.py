@@ -21,9 +21,9 @@ class PrecombatScene(Scene):
     def __init__(self, window):
         self.backAct = Action.ClickAction(window, Template.Template(window, "返回", "./Precombat/Back.png"))
         self.exerciseAct = Action.ClickAction(window, Template.Template(window, "演习", "./Precombat/Exercise.png"))
-        self.c03s04Templ = Template.Template(window, "3-4", "./Precombat/C03S04.png")
-        self.goNowTempl = Template.Template(window, "立刻前往", "./Precombat/GoNow.png")
-        self.goNowTempl2 = Template.Template(window, "立刻前往2", "./Precombat/GoNow2.png")
+        self.c03s04Act = Action.ClickAction(window, Template.Template(window, "3-4", "./Precombat/C03S04.png"), 0.95)
+        self.goNowTAct = Action.ClickAction(window, Template.Template(window, "立刻前往", "./Precombat/GoNow.png"))
+        self.goNowTAct2 = Action.ClickAction(window, Template.Template(window, "立刻前往2", "./Precombat/GoNow2.png"))
 
     def back(self):
         self.backAct.execute()
@@ -32,32 +32,9 @@ class PrecombatScene(Scene):
         self.exerciseAct.execute()
 
     def enterC03S04(self):
-        c03s04Target = None
-        goNowTarget = None
-        goNowTarget2 = None
-        while True:
-            image = self.window.capture()
-            if image is None:
-                time.sleep(0.1)
-                continue
-            if c03s04Target is None:
-                c03s04Target = self.c03s04Templ.matchOn(image, 0.97)
-                if c03s04Target is not None:
-                    c03s04Target.click()
-                    self.sleep()
-                continue
-            if goNowTarget is None:
-                goNowTarget = self.goNowTempl.matchOn(image)
-                if goNowTarget is not None:
-                    goNowTarget.click()
-                    self.sleep()
-                continue
-            if goNowTarget2 is None:
-                goNowTarget2 = self.goNowTempl2.matchOn(image)
-                if goNowTarget2 is not None:
-                    goNowTarget2.click()
-                    self.sleep()
-                    break
+        self.c03s04Act.execute()
+        self.goNowTAct.execute()
+        self.goNowTAct2.execute()
 
 
 class ExerciseScene(Scene):
@@ -69,7 +46,7 @@ class ExerciseScene(Scene):
         self.startExerciseAct = Action.ClickAction(window,
                                                    Template.Template(window, "开始演习", "./Exercise/StartExercise.png"))
         self.weighAnchorAct = Action.ClickAction(window, Template.Template(window, "出击", "./Exercise/WeighAnchor.png"))
-        self.ttcAct = Action.ClickAction(window, Template.Template(window, "点击继续", "./Exercise/TTC.png"), 0.90,
+        self.ttcAct = Action.ClickAction(window, Template.Template(window, "点击继续", "./Exercise/TTC.png"), 0.85,
                                          specifiedTarget=Template.Target(window, gc.Point(50, 420),
                                                                          gc.Size(850, 130)))
         self.ttcAct2 = Action.ClickAction(window, Template.Template(window, "点击继续2", "./Exercise/TTC2.png"),
