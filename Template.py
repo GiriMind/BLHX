@@ -20,7 +20,7 @@ class Template:
             if self.mask.getType() != gcc.IT_8UC4:
                 raise Exception("掩码图片格式错误：请保存为32位色。\n{0}".format(maskName))
 
-    def matchOn(self, image, threshold=0.98):
+    def matchOn(self, image, threshold):
         if self.mask is None:
             result = image.matchTemplate(self.templ, gcc.MTM_CCOEFF_NORMED)
         else:
@@ -33,7 +33,7 @@ class Template:
             print("匹配[{0}]失败，相似度是{1}。".format(self.name, minMaxLoc.maxVal))
             return None
 
-    def matchMultiOn(self, image, threshold=0.98):
+    def matchMultiOn(self, image, threshold):
         if self.mask is None:
             result = image.matchTemplate(self.templ, gcc.MTM_CCOEFF_NORMED)
         else:

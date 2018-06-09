@@ -8,18 +8,16 @@ import GraphCapCon as gcc
 
 class DesktopWindow:
     def __init__(self):
-        print("正在枚举窗口……")
+        print("窗口列表：")
         windowList = gc.Window.EnumWindows()
         for i in range(len(windowList)):
             window = windowList[i]
             print("{0}.[{1}]{2}".format(i + 1, window.getPid(), window.getName()))
         j = int(input("请输入窗口编号："))
         self.window = windowList[j - 1]
-
         self.capturer = gc.DesktopCapturer()
         self.image = gc.Image()
         self.rect = gc.Rect()
-
         self.input = gc.DesktopInput()
 
     def capture(self):
