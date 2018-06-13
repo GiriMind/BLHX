@@ -1,12 +1,16 @@
 # coding: utf-8
 
+import time
+import random
+
 import GraphCap as gc
 import Template
 import Action
 
 
 class Scene:
-    pass
+    def sleep(self, min=1.0, max=2.0):
+        time.sleep(random.uniform(min, max))
 
 
 class MainScene(Scene):
@@ -14,7 +18,9 @@ class MainScene(Scene):
         self.weighAnchorAct = Action.ClickAction(window, Template.Template(window, "出击", "./Main/WeighAnchor.png"))
 
     def enterPrecombat(self):
+        self.sleep()
         self.weighAnchorAct.execute()
+        self.sleep()
 
 
 class PrecombatScene(Scene):
@@ -22,19 +28,27 @@ class PrecombatScene(Scene):
         self.backAct = Action.ClickAction(window, Template.Template(window, "返回", "./Precombat/Back.png"))
         self.exerciseAct = Action.ClickAction(window, Template.Template(window, "演习", "./Precombat/Exercise.png"))
         self.c03s04Act = Action.ClickAction(window, Template.Template(window, "3-4", "./Precombat/C03S04.png"), 0.95)
-        self.goNowTAct = Action.ClickAction(window, Template.Template(window, "立刻前往", "./Precombat/GoNow.png"))
-        self.goNowTAct2 = Action.ClickAction(window, Template.Template(window, "立刻前往2", "./Precombat/GoNow2.png"))
+        self.goNowAct = Action.ClickAction(window, Template.Template(window, "立刻前往", "./Precombat/GoNow.png"))
+        self.goNowAct2 = Action.ClickAction(window, Template.Template(window, "立刻前往2", "./Precombat/GoNow2.png"))
 
     def back(self):
+        self.sleep()
         self.backAct.execute()
+        self.sleep()
 
     def enterExercise(self):
+        self.sleep()
         self.exerciseAct.execute()
+        self.sleep()
 
     def enterC03S04(self):
+        self.sleep()
         self.c03s04Act.execute()
-        self.goNowTAct.execute()
-        self.goNowTAct2.execute()
+        self.sleep()
+        self.goNowAct.execute()
+        self.sleep()
+        self.goNowAct2.execute()
+        self.sleep()
 
 
 class ExerciseScene(Scene):
@@ -55,28 +69,38 @@ class ExerciseScene(Scene):
         self.confirmAct = Action.ClickAction(window, Template.Template(window, "确认", "./Exercise/Confirm.png"))
 
     def back(self):
+        self.sleep()
         self.backAct.execute()
+        self.sleep()
 
     def enterExercise(self):
+        self.sleep()
         self.operationAct.execute()
+        self.sleep()
         self.startExerciseAct.execute()
+        self.sleep()
         self.weighAnchorAct.execute()
+        self.sleep()
 
     def leaveExercise(self):
+        self.sleep()
         self.ttcAct.execute()
+        self.sleep()
         self.ttcAct2.execute()
+        self.sleep()
         self.confirmAct.execute()
+        self.sleep()
 
 
 class C03S04Scene(Scene):
     def __init__(self, window):
-        self.recFleetTempl = Template.Template(window, "侦查舰队", "./SubChapter/RecFleet.png",
-                                               "./SubChapter/RecFleetMask.png")
-        self.mainFleetTempl = Template.Template(window, "主力舰队", "./SubChapter/MainFleet.png",
-                                                "./SubChapter/MainFleetMask.png")
-        self.airFleetTempl = Template.Template(window, "航空舰队", "./SubChapter/AirFleet.png",
-                                               "./SubChapter/AirFleetMask.png")
-        self.weighAnchorTempl = Template.Template(window, "出击", "./SubChapter/WeighAnchor.png")
+        self.recFleetTempl = Template.Template(window, "侦查舰队", "./Subchapter/RecFleet.png",
+                                               "./Subchapter/RecFleetMask.png")
+        self.mainFleetTempl = Template.Template(window, "主力舰队", "./Subchapter/MainFleet.png",
+                                                "./Subchapter/MainFleetMask.png")
+        self.airFleetTempl = Template.Template(window, "航空舰队", "./Subchapter/AirFleet.png",
+                                               "./Subchapter/AirFleetMask.png")
+        self.weighAnchorTempl = Template.Template(window, "出击", "./Subchapter/WeighAnchor.png")
 
     def enterBattle(self):
         while True:
@@ -113,11 +137,6 @@ class C03S04Scene(Scene):
                     if len(airFleetTargetList) > 0:
                         airFleetTargetList[0].click()
                         self.sleep()
-
-            # weighAnchorTarget = self.weighAnchorTempl.match(image)
-            # if weighAnchorTarget is not None:
-            #    weighAnchorTarget.click()
-            #    self.sleep()
 
 
 class BattleScene(Scene):

@@ -32,10 +32,10 @@ class C03S04Task(Task):
         self.window = window
 
     def run(self):
-        mainScene = Scene.MainScene(self.window)
-        precombatScene = Scene.PrecombatScene(self.window)
+        # mainScene = Scene.MainScene(self.window)
+        # precombatScene = Scene.PrecombatScene(self.window)
         c03s04Scene = Scene.C03S04Scene(self.window)
-        battleScene = Scene.BattleScene(self.window)
+        # battleScene = Scene.BattleScene(self.window)
         # while True:
         #    precombatScene.enterC03S04()
         #    while c03s04Scene.bossExist:
