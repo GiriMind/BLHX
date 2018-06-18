@@ -2,7 +2,6 @@
 
 import random
 
-import GraphCap as gc
 import Window
 import Task
 
@@ -11,11 +10,6 @@ def BLHX():
     random.seed()
 
     window = Window.DesktopWindow()
-    # while True:
-    #    image = window.capture()
-    #    if image is not None:
-    #        image.show("test")
-    #        gc.Utils.WaitKey(1)
 
     print("任务列表：")
     print("1.自动打演习")

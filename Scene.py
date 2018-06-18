@@ -55,17 +55,17 @@ class ExerciseScene(Scene):
     def __init__(self, window):
         self.backAct = Action.ClickAction(window, Template.Template(window, "返回", "./Exercise/Back.png"))
         self.operationAct = Action.ClickAction(window, Template.Template(window, "演习", "./Exercise/Operation.png"),
-                                               specifiedTarget=Template.Target(window, gc.Point(50, 128),
-                                                                               gc.Size(160, 228)))
+                                               specifiedTarget=Template.SpecifiedTarget(window, gc.Point(50, 128),
+                                                                                        gc.Size(160, 228)))
         self.startExerciseAct = Action.ClickAction(window,
                                                    Template.Template(window, "开始演习", "./Exercise/StartExercise.png"))
         self.weighAnchorAct = Action.ClickAction(window, Template.Template(window, "出击", "./Exercise/WeighAnchor.png"))
         self.ttcAct = Action.ClickAction(window, Template.Template(window, "点击继续", "./Exercise/TTC.png"), 0.85,
-                                         specifiedTarget=Template.Target(window, gc.Point(50, 420),
-                                                                         gc.Size(850, 130)))
+                                         specifiedTarget=Template.SpecifiedTarget(window, gc.Point(50, 420),
+                                                                                  gc.Size(850, 130)))
         self.ttcAct2 = Action.ClickAction(window, Template.Template(window, "点击继续2", "./Exercise/TTC2.png"),
-                                          specifiedTarget=Template.Target(window, gc.Point(50, 420),
-                                                                          gc.Size(850, 130)))
+                                          specifiedTarget=Template.SpecifiedTarget(window, gc.Point(50, 420),
+                                                                                   gc.Size(850, 130)))
         self.confirmAct = Action.ClickAction(window, Template.Template(window, "确认", "./Exercise/Confirm.png"))
 
     def back(self):
@@ -101,42 +101,39 @@ class C03S04Scene(Scene):
         self.airFleetTempl = Template.Template(window, "航空舰队", "./Subchapter/AirFleet.png",
                                                "./Subchapter/AirFleetMask.png")
         self.weighAnchorTempl = Template.Template(window, "出击", "./Subchapter/WeighAnchor.png")
+        self.window = window
+        self.mapX = 75
+        self.mapY = 249
+        self.mapWidth = 890
+        self.mapHeight = 304
+        self.map = [[0 for i in range(8)] for i in range(4)]
+        self.pt = gc.PerspectiveTransform(gc.Size2f(890, 446), 304, 70, 81)
 
     def enterBattle(self):
         while True:
             image = self.window.capture()
-            if image is None:
-                time.sleep(0.1)
-                continue
-
-            recFleetTargetList = self.recFleetTempl.matchMultiOn(image, 0.985)
-            mainFleetTargetList = self.mainFleetTempl.matchMultiOn(image, 0.985)
-            airFleetTargetList = self.airFleetTempl.matchMultiOn(image, 0.985)
 
             display = image.clone()
-            for recFleetTarget in recFleetTargetList:
-                display.rectangle(gc.Rect(recFleetTarget.location, recFleetTarget.size), gc.Scalar(255, 0, 0))
-            for mainFleetTarget in mainFleetTargetList:
-                display.rectangle(gc.Rect(mainFleetTarget.location, mainFleetTarget.size), gc.Scalar(255, 0, 0))
-            for airFleetTarget in airFleetTargetList:
-                display.rectangle(gc.Rect(airFleetTarget.location, airFleetTarget.size), gc.Scalar(255, 0, 0))
+            recFleetTarget = self.recFleetTempl.matchOn(image)
+            for i in range(5):
+                if recFleetTarget.similarity > 0.95:
+                    display.rectangle(gc.Rect(recFleetTarget.location, recFleetTarget.template.getSize()),
+                                      gc.Scalar(255, 0, 0))
+                recFleetTarget = recFleetTarget.next()
+            mainFleetTarget = self.mainFleetTempl.matchOn(image)
+            for i in range(5):
+                if mainFleetTarget.similarity > 0.95:
+                    display.rectangle(gc.Rect(mainFleetTarget.location, mainFleetTarget.template.getSize()),
+                                      gc.Scalar(255, 0, 0))
+                mainFleetTarget = mainFleetTarget.next()
+            airFleetTarget = self.airFleetTempl.matchOn(image)
+            for i in range(5):
+                if airFleetTarget.similarity > 0.95:
+                    display.rectangle(gc.Rect(airFleetTarget.location, airFleetTarget.template.getSize()),
+                                      gc.Scalar(255, 0, 0))
+                airFleetTarget = airFleetTarget.next()
             display.show("display")
             gc.Utils.WaitKey(1)
-
-            print(len(recFleetTargetList))
-            print(len(mainFleetTargetList))
-            print(len(airFleetTargetList))
-            if len(recFleetTargetList) > 0:
-                recFleetTargetList[0].click()
-                self.sleep()
-            else:
-                if len(mainFleetTargetList) > 0:
-                    mainFleetTargetList[0].click()
-                    self.sleep()
-                else:
-                    if len(airFleetTargetList) > 0:
-                        airFleetTargetList[0].click()
-                        self.sleep()
 
 
 class BattleScene(Scene):

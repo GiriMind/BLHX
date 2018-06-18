@@ -1,5 +1,6 @@
 # coding: utf-8
 
+import time
 import random
 
 import GraphCap as gc
@@ -21,21 +22,23 @@ class DesktopWindow:
         self.input = gc.DesktopInput()
 
     def capture(self):
-        self.rect = self.window.getRect()
-        # print("窗口位置：x={0}, y={1}, width={2}, height={3}".format(
-        #    self.rect.x, self.rect.y, self.rect.width, self.rect.height))
-        if not self.capturer.capture(self.image, self.rect):
-            print("捕获图像失败：桌面超时未更新，或者窗口位置错误。")
-            return None
-        if self.image.getType() != gcc.IT_8UC4:
-            raise Exception("图像格式错误：请将桌面设置为32位色。")
-        # print("捕获位置：x={0}, y={1}, width={2}, height={3}".format(
-        #    self.rect.x, self.rect.y, self.rect.width, self.rect.height))
-        dsize = gc.Size(974, 634)
-        if self.rect.width != dsize.width or self.rect.height != dsize.height:
-            return self.image.resize(dsize)
-        else:
-            return self.image
+        while True:
+            self.rect = self.window.getRect()
+            # print("窗口位置：x={0}, y={1}, width={2}, height={3}".format(
+            #    self.rect.x, self.rect.y, self.rect.width, self.rect.height))
+            if not self.capturer.capture(self.image, self.rect):
+                print("捕获图像失败：桌面超时未更新，或者窗口位置错误。")
+                time.sleep(0.1)
+                continue
+            if self.image.getType() != gcc.IT_8UC4:
+                raise Exception("图像格式错误：请将桌面设置为32位色。")
+            # print("捕获位置：x={0}, y={1}, width={2}, height={3}".format(
+            #    self.rect.x, self.rect.y, self.rect.width, self.rect.height))
+            dsize = gc.Size(974, 634)
+            if self.rect.width != dsize.width or self.rect.height != dsize.height:
+                return self.image.resize(dsize)
+            else:
+                return self.image
 
     def click(self, location, size):
         x = self.rect.x + location.x + random.randint(0, size.width - 1)

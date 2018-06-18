@@ -18,11 +18,9 @@ class ExerciseTask(Task):
         exerciseScene = Scene.ExerciseScene(self.window)
         mainScene.enterPrecombat()
         precombatScene.enterExercise()
-        i = 5
-        while i > 0:
+        for i in range(5):
             exerciseScene.enterExercise()
             exerciseScene.leaveExercise()
-            i -= 1
         exerciseScene.back()
         precombatScene.back()
 

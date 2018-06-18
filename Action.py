@@ -24,13 +24,10 @@ class ClickAction(Action):
         beginTime = time.time()
         while time.time() - beginTime < self.timeout:
             image = self.window.capture()
-            if image is not None:
-                target = self.template.matchOn(image, self.threshold)
-                if target is not None:
-                    self.click(target)
-                    return True
-            else:
-                time.sleep(0.1)
+            target = self.template.matchOn(image)
+            if target.similarity > self.threshold:
+                self.click(target)
+                return True
         return False
 
     def click(self, target):
