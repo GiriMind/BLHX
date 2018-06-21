@@ -24,7 +24,6 @@ class Template:
         return self.templImage.getSize()
 
     def matchOn(self, image):
-        # 很慢很慢
         if self.maskImage is None:
             result = image.matchTemplate(self.templImage, gcc.MTM_CCOEFF_NORMED)
         else:
@@ -37,14 +36,17 @@ class Target:
         self.window = window
         self.template = template
         self.result = result
-
         minMaxLoc = result.minMaxLoc()
         self.location = minMaxLoc.maxLoc
         self.similarity = minMaxLoc.maxVal
-        print("[{0}]的相似度是{1}。".format(self.template.name, self.similarity))
+        #print("[{0}]的相似度是{1}。".format(self.template.name, self.similarity))
 
     def next(self):
-        self.result.floodFill(self.location, gc.Scalar(0.0))
+        try:
+            self.result.floodFill(self.location, gc.Scalar(0.0))
+        except Exception as e:
+            print(e)
+            print("location:{0},{1}".format(self.location.x, self.location.y))
         return Target(self.window, self.template, self.result)
 
     def click(self):

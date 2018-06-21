@@ -102,38 +102,69 @@ class C03S04Scene(Scene):
                                                "./Subchapter/AirFleetMask.png")
         self.weighAnchorTempl = Template.Template(window, "出击", "./Subchapter/WeighAnchor.png")
         self.window = window
-        self.mapX = 75
-        self.mapY = 249
-        self.mapWidth = 890
-        self.mapHeight = 304
-        self.map = [[0 for i in range(8)] for i in range(4)]
-        self.pt = gc.PerspectiveTransform(gc.Size2f(890, 446), 304, 70, 81)
+        self.mapX = 74
+        self.mapY = 250 - (448 - 304)
+        self.tileSize = 110
+        self.columns = 8
+        self.rows = 4
+        self.pt = gc.PerspectiveTransform(gc.Size2f(890, 448), 304, 70, 81)
+        self.map = [[0 for i in range(self.columns)] for i in range(self.rows)]
 
     def enterBattle(self):
         while True:
             image = self.window.capture()
 
-            display = image.clone()
+            map = [[0 for i in range(self.columns)] for i in range(self.rows)]
+            #display = image.clone()
             recFleetTarget = self.recFleetTempl.matchOn(image)
             for i in range(5):
                 if recFleetTarget.similarity > 0.95:
-                    display.rectangle(gc.Rect(recFleetTarget.location, recFleetTarget.template.getSize()),
-                                      gc.Scalar(255, 0, 0))
+                    # display.rectangle(gc.Rect(recFleetTarget.location, recFleetTarget.template.getSize()),
+                    #                  gc.Scalar(255, 0, 0))
+                    x = recFleetTarget.location.x - self.mapX
+                    y = recFleetTarget.location.y - self.mapY
+                    transPos = self.pt.transform(gc.Point2f(x, y))
+                    col = int(transPos.x / self.tileSize)
+                    row = int(transPos.y / self.tileSize)
+                    if col >= 0 and col < self.columns and row >= 0 and row < self.rows:
+                        map[row][col] = 1
                 recFleetTarget = recFleetTarget.next()
             mainFleetTarget = self.mainFleetTempl.matchOn(image)
             for i in range(5):
                 if mainFleetTarget.similarity > 0.95:
-                    display.rectangle(gc.Rect(mainFleetTarget.location, mainFleetTarget.template.getSize()),
-                                      gc.Scalar(255, 0, 0))
+                    #display.rectangle(gc.Rect(mainFleetTarget.location, mainFleetTarget.template.getSize()),
+                    #                  gc.Scalar(255, 0, 0))
+                    x = mainFleetTarget.location.x - self.mapX
+                    y = mainFleetTarget.location.y - self.mapY
+                    transPos = self.pt.transform(gc.Point2f(x, y))
+                    col = int(transPos.x / self.tileSize)
+                    row = int(transPos.y / self.tileSize)
+                    if col >= 0 and col < self.columns and row >= 0 and row < self.rows:
+                        map[row][col] = 2
                 mainFleetTarget = mainFleetTarget.next()
             airFleetTarget = self.airFleetTempl.matchOn(image)
             for i in range(5):
                 if airFleetTarget.similarity > 0.95:
-                    display.rectangle(gc.Rect(airFleetTarget.location, airFleetTarget.template.getSize()),
-                                      gc.Scalar(255, 0, 0))
+                    #display.rectangle(gc.Rect(airFleetTarget.location, airFleetTarget.template.getSize()),
+                    #                  gc.Scalar(255, 0, 0))
+                    x = airFleetTarget.location.x - self.mapX
+                    y = airFleetTarget.location.y - self.mapY
+                    transPos = self.pt.transform(gc.Point2f(x, y))
+                    col = int(transPos.x / self.tileSize)
+                    row = int(transPos.y / self.tileSize)
+                    if col >= 0 and col < self.columns and row >= 0 and row < self.rows:
+                        map[row][col] = 3
                 airFleetTarget = airFleetTarget.next()
-            display.show("display")
-            gc.Utils.WaitKey(1)
+            #display.show("display")
+            #gc.Utils.WaitKey(1)
+            print("--------------------------------------------")
+            for row in range(4):
+                line = str()
+                for col in range(8):
+                    id = map[row][col]
+                    line += " %d " % id
+                print(line)
+            print("--------------------------------------------")
 
 
 class BattleScene(Scene):
