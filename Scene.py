@@ -115,48 +115,42 @@ class C03S04Scene(Scene):
             image = self.window.capture()
 
             map = [[0 for i in range(self.columns)] for i in range(self.rows)]
-            #display = image.clone()
             recFleetTarget = self.recFleetTempl.matchOn(image)
             for i in range(5):
                 if recFleetTarget.similarity > 0.95:
-                    # display.rectangle(gc.Rect(recFleetTarget.location, recFleetTarget.template.getSize()),
-                    #                  gc.Scalar(255, 0, 0))
-                    x = recFleetTarget.location.x - self.mapX
-                    y = recFleetTarget.location.y - self.mapY
+                    size = recFleetTarget.getSize()
+                    x = recFleetTarget.location.x - self.mapX + size.width / 2
+                    y = recFleetTarget.location.y - self.mapY + size.height / 2
                     transPos = self.pt.transform(gc.Point2f(x, y))
                     col = int(transPos.x / self.tileSize)
                     row = int(transPos.y / self.tileSize)
-                    if col >= 0 and col < self.columns and row >= 0 and row < self.rows:
+                    if 0 <= col < self.columns and 0 <= row < self.rows:
                         map[row][col] = 1
                 recFleetTarget = recFleetTarget.next()
             mainFleetTarget = self.mainFleetTempl.matchOn(image)
             for i in range(5):
                 if mainFleetTarget.similarity > 0.95:
-                    #display.rectangle(gc.Rect(mainFleetTarget.location, mainFleetTarget.template.getSize()),
-                    #                  gc.Scalar(255, 0, 0))
-                    x = mainFleetTarget.location.x - self.mapX
-                    y = mainFleetTarget.location.y - self.mapY
+                    size = recFleetTarget.getSize()
+                    x = mainFleetTarget.location.x - self.mapX + size.width / 2
+                    y = mainFleetTarget.location.y - self.mapY + size.height / 2
                     transPos = self.pt.transform(gc.Point2f(x, y))
                     col = int(transPos.x / self.tileSize)
                     row = int(transPos.y / self.tileSize)
-                    if col >= 0 and col < self.columns and row >= 0 and row < self.rows:
+                    if 0 <= col < self.columns and 0 <= row < self.rows:
                         map[row][col] = 2
                 mainFleetTarget = mainFleetTarget.next()
             airFleetTarget = self.airFleetTempl.matchOn(image)
             for i in range(5):
                 if airFleetTarget.similarity > 0.95:
-                    #display.rectangle(gc.Rect(airFleetTarget.location, airFleetTarget.template.getSize()),
-                    #                  gc.Scalar(255, 0, 0))
-                    x = airFleetTarget.location.x - self.mapX
-                    y = airFleetTarget.location.y - self.mapY
+                    size = recFleetTarget.getSize()
+                    x = airFleetTarget.location.x - self.mapX + size.width / 2
+                    y = airFleetTarget.location.y - self.mapY + size.height / 2
                     transPos = self.pt.transform(gc.Point2f(x, y))
                     col = int(transPos.x / self.tileSize)
                     row = int(transPos.y / self.tileSize)
-                    if col >= 0 and col < self.columns and row >= 0 and row < self.rows:
+                    if 0 <= col < self.columns and 0 <= row < self.rows:
                         map[row][col] = 3
                 airFleetTarget = airFleetTarget.next()
-            #display.show("display")
-            #gc.Utils.WaitKey(1)
             print("--------------------------------------------")
             for row in range(4):
                 line = str()
