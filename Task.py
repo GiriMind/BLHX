@@ -25,6 +25,19 @@ class ExerciseTask(Task):
         precombatScene.back()
 
 
+class C01S01LoopTask(Task):
+    def __init__(self, window):
+        self.window = window
+
+    def run(self):
+        mainScene = Scene.MainScene(self.window)
+        precombatScene = Scene.PrecombatScene(self.window)
+        #mainScene.enterPrecombat()
+        #while True:
+        precombatScene.enterSubcapter(1, 1)
+
+
+
 class C03S04Task(Task):
     def __init__(self, window):
         self.window = window

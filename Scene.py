@@ -9,12 +9,16 @@ import Action
 
 
 class Scene:
+    def __init__(self, window):
+        self.window = window
+
     def sleep(self, min=1.0, max=2.0):
         time.sleep(random.uniform(min, max))
 
 
 class MainScene(Scene):
     def __init__(self, window):
+        super().__init__(window)
         self.weighAnchorAct = Action.ClickAction(window, Template.Template(window, "出击", "./Main/WeighAnchor.png"))
 
     def enterPrecombat(self):
@@ -25,11 +29,26 @@ class MainScene(Scene):
 
 class PrecombatScene(Scene):
     def __init__(self, window):
+        super().__init__(window)
         self.backAct = Action.ClickAction(window, Template.Template(window, "返回", "./Precombat/Back.png"))
         self.exerciseAct = Action.ClickAction(window, Template.Template(window, "演习", "./Precombat/Exercise.png"))
         self.c03s04Act = Action.ClickAction(window, Template.Template(window, "3-4", "./Precombat/C03S04.png"), 0.95)
         self.goNowAct = Action.ClickAction(window, Template.Template(window, "立刻前往", "./Precombat/GoNow.png"))
         self.goNowAct2 = Action.ClickAction(window, Template.Template(window, "立刻前往2", "./Precombat/GoNow2.png"))
+
+        self.chapterTemplList = []
+        self.chapterTemplList.append(Template.Template(window, "第1章", "./Precombat/C01.png"))
+        self.chapterTemplList.append(Template.Template(window, "第2章", "./Precombat/C02.png"))
+        self.chapterTemplList.append(Template.Template(window, "第3章", "./Precombat/C03.png"))
+        self.chapterTemplList.append(Template.Template(window, "第4章", "./Precombat/C04.png"))
+        self.chapterTemplList.append(Template.Template(window, "第5章", "./Precombat/C05.png"))
+        self.chapterTemplList.append(Template.Template(window, "第6章", "./Precombat/C06.png"))
+        self.chapterTemplList.append(Template.Template(window, "第7章", "./Precombat/C07.png"))
+        self.chapterTemplList.append(Template.Template(window, "第8章", "./Precombat/C08.png"))
+        self.chapterTemplList.append(Template.Template(window, "第9章", "./Precombat/C09.png"))
+        self.chapterTemplList.append(Template.Template(window, "第10章", "./Precombat/C10.png"))
+        self.chapterTemplList.append(Template.Template(window, "第11章", "./Precombat/C11.png"))
+        self.chapterTemplList.append(Template.Template(window, "第12章", "./Precombat/C12.png"))
 
     def back(self):
         self.sleep()
@@ -40,6 +59,20 @@ class PrecombatScene(Scene):
         self.sleep()
         self.exerciseAct.execute()
         self.sleep()
+
+    def getChapter(self):
+        while True:
+            image = self.window.capture()
+            subImage = image.clip(gc.Rect(30, 115, 28, 20))
+            for i in range(len(self.chapterTemplList)):
+                chapterTempl = self.chapterTemplList[i]
+                target = chapterTempl.matchOn(subImage)
+                if target.similarity > 0.99:
+                    print("当前是第{0}章".format(i + 1))
+                    break
+
+    def enterSubcapter(self, capter, subcapter):
+        current = self.getChapter()
 
     def enterC03S04(self):
         self.sleep()
@@ -53,6 +86,7 @@ class PrecombatScene(Scene):
 
 class ExerciseScene(Scene):
     def __init__(self, window):
+        super().__init__(window)
         self.backAct = Action.ClickAction(window, Template.Template(window, "返回", "./Exercise/Back.png"))
         self.operationAct = Action.ClickAction(window, Template.Template(window, "演习", "./Exercise/Operation.png"),
                                                specifiedTarget=Template.SpecifiedTarget(window, gc.Point(50, 128),
@@ -92,8 +126,19 @@ class ExerciseScene(Scene):
         self.sleep()
 
 
-class C03S04Scene(Scene):
+class SubchapterScene(Scene):
     def __init__(self, window):
+        super().__init__(window)
+
+
+class C01S01Scene(SubchapterScene):
+    def __init__(self, window):
+        super().__init__(window)
+
+
+class C03S04Scene(SubchapterScene):
+    def __init__(self, window):
+        super().__init__(window)
         self.recFleetTempl = Template.Template(window, "侦查舰队", "./Subchapter/RecFleet.png",
                                                "./Subchapter/RecFleetMask.png")
         self.mainFleetTempl = Template.Template(window, "主力舰队", "./Subchapter/MainFleet.png",
@@ -101,7 +146,6 @@ class C03S04Scene(Scene):
         self.airFleetTempl = Template.Template(window, "航空舰队", "./Subchapter/AirFleet.png",
                                                "./Subchapter/AirFleetMask.png")
         self.weighAnchorTempl = Template.Template(window, "出击", "./Subchapter/WeighAnchor.png")
-        self.window = window
         self.mapX = 74
         self.mapY = 250 - (448 - 304)
         self.tileSize = 110
@@ -163,6 +207,7 @@ class C03S04Scene(Scene):
 
 class BattleScene(Scene):
     def __init__(self, window):
+        super().__init__(window)
         self.ttcTempl = Template.Template(window, "点击继续", "./Battle/TTC.png")
         self.performanceTempl = Template.Template(window, "性能", "./Battle/Performance.png")
         self.confirmTempl = Template.Template(window, "确认", "./Battle/Confirm.png")

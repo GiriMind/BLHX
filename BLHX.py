@@ -13,11 +13,14 @@ def BLHX():
 
     print("任务列表：")
     print("1.自动打演习")
-    print("2.自动捞吃喝")
+    print("2.1-1伏击炼金")
+    print("3.自动捞吃喝")
     i = int(input("请输入任务编号："))
     if i == 1:
         task = Task.ExerciseTask(window)
     elif i == 2:
+        task = Task.C01S01LoopTask(window)
+    elif i == 3:
         task = Task.C03S04Task(window)
     else:
         task = None

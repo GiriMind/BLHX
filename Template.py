@@ -39,7 +39,7 @@ class Target:
         minMaxLoc = result.minMaxLoc()
         self.location = minMaxLoc.maxLoc
         self.similarity = minMaxLoc.maxVal
-        # print("[{0}]的相似度是{1}。".format(self.template.name, self.similarity))
+        print("[{0}]的相似度是{1}。".format(self.template.name, self.similarity))
 
     def getSize(self):
         return self.template.getSize()
