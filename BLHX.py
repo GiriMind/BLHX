@@ -1,10 +1,13 @@
 # coding: utf-8
 
+import sys
+import os
 import random
+
+sys.path.append(os.path.dirname(__file__))
 
 import Window
 import Task
-
 
 def BLHX():
     random.seed()
@@ -12,8 +15,8 @@ def BLHX():
     window = Window.DesktopWindow()
 
     print("任务列表：")
-    print("1.自动打演习")
-    print("2.1-1伏击炼金")
+    print("1.自动打5次演习")
+    print("2.自动1-1伏击炼金")
     print("3.自动捞吃喝")
     i = int(input("请输入任务编号："))
     if i == 1:

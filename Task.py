@@ -32,10 +32,9 @@ class C01S01LoopTask(Task):
     def run(self):
         mainScene = Scene.MainScene(self.window)
         precombatScene = Scene.PrecombatScene(self.window)
-        #mainScene.enterPrecombat()
-        #while True:
+        # mainScene.enterPrecombat()
+        # while True:
         precombatScene.enterSubcapter(1, 1)
-
 
 
 class C03S04Task(Task):
