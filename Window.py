@@ -16,6 +16,11 @@ class DesktopWindow:
             print("{0}.[{1}]{2}".format(i + 1, window.getPid(), window.getName()))
         j = int(input("请输入窗口编号："))
         self.window = windowList[j - 1]
+        if self.window.isZoomed():
+            self.window.restore()
+        if self.window.isIconic():
+            self.window.restore()
+        self.window.setSize(gc.Size(974, 634))
         self.capturer = gc.DesktopCapturer()
         self.image = gc.Image()
         self.rect = gc.Rect()
@@ -30,15 +35,11 @@ class DesktopWindow:
                 print("捕获图像失败：桌面超时未更新，或者窗口位置错误。")
                 time.sleep(0.1)
                 continue
-            if self.image.getType() != gcc.IT_8UC4:
-                raise Exception("图像格式错误：请将桌面设置为32位色。")
             # print("捕获位置：x={0}, y={1}, width={2}, height={3}".format(
             #    self.rect.x, self.rect.y, self.rect.width, self.rect.height))
-            dsize = gc.Size(974, 634)
-            if self.rect.width != dsize.width or self.rect.height != dsize.height:
-                return self.image.resize(dsize)
-            else:
-                return self.image
+            if self.image.getType() != gcc.IT_8UC4:
+                raise Exception("图像格式错误：请将桌面设置为32位色。")
+            return self.image
 
     def click(self, location, size):
         x = self.rect.x + location.x + random.randint(0, size.width - 1)
