@@ -2,6 +2,10 @@
 
 基于图像识别的碧蓝航线挂机脚本。
 
+## 系统要求
+
+Win8或者以上
+
 ## 模拟器
 
 推荐挂代理去[bluestacks.com](https://www.bluestacks.com/)下载原版的BlueStacks，使用[BSTweaker](https://forum.xda-developers.com/general/general/bluestacks-tweaker-2-tool-modifing-t3622681)关闭Google账号登录要求。

@@ -16,7 +16,7 @@ class Action:
 
 
 class ClickAction(Action):
-    def __init__(self, window, template, threshold=0.98, timeout=sys.float_info.max, specifiedTarget=None):
+    def __init__(self, window, template, threshold=0.95, timeout=sys.float_info.max, specifiedTarget=None):
         super().__init__(window, template, threshold, timeout)
         self.specifiedTarget = specifiedTarget
 
