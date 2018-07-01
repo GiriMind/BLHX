@@ -9,18 +9,22 @@ import GraphCapCon as gcc
 
 class DesktopWindow:
     def __init__(self):
-        print("窗口列表：")
-        windowList = gc.Window.EnumWindows()
-        for i in range(len(windowList)):
-            window = windowList[i]
-            print("{0}.[{1}]{2}".format(i + 1, window.getPid(), window.getName()))
-        j = int(input("请输入窗口编号："))
-        self.window = windowList[j - 1]
-        if self.window.isZoomed():
-            self.window.restore()
-        if self.window.isIconic():
+        # print("窗口列表：")
+        # windowList = gc.Window.EnumWindows()
+        # for i in range(len(windowList)):
+        #    window = windowList[i]
+        #    print("{0}.[{1}]{2}".format(i + 1, window.getPid(), window.getName()))
+        # j = int(input("请输入窗口编号："))
+        # self.window = windowList[j - 1]
+        try:
+            self.window = gc.Window.FindByName("BlueStacks")
+        except Exception as e:
+            print("查找窗口失败，请先运行模拟器。")
+            raise
+        if self.window.isZoomed() or self.window.isIconic():
             self.window.restore()
         self.window.setSize(gc.Size(974, 634))
+
         self.capturer = gc.DesktopCapturer()
         self.image = gc.Image()
         self.rect = gc.Rect()
