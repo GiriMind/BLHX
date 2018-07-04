@@ -6,30 +6,29 @@ import random
 
 sys.path.append(os.path.dirname(__file__))
 
-import Window
+import Game
 import Task
+
 
 def BLHX():
     random.seed()
-
-    window = Window.DesktopWindow()
-
+    game = Game.Game()
     print("任务列表：")
-    print("1.自动打5次演习")
-    print("2.自动1-1伏击炼金")
-    print("3.自动捞吃喝")
+    print("1.打5次演习")
+    print("2.1-1伏击刷好感度")
+    print("3.3-4捞吃喝")
     i = int(input("请输入任务编号："))
     if i == 1:
-        task = Task.ExerciseTask(window)
+        task = Task.ExerciseTask(game)
     elif i == 2:
-        task = Task.C01S01LoopTask(window)
+        task = Task.C01S01LoopTask(game)
     elif i == 3:
-        task = Task.C03S04Task(window)
+        task = Task.C03S04Task(game)
     else:
-        task = None
-    print("脚本开始。")
+        task = Task.Task(game)
+    print("任务开始。")
     task.run()
-    print("脚本结束。")
+    print("任务结束。")
 
 
 if __name__ == "__main__":

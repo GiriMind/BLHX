@@ -9,17 +9,17 @@ import Action
 
 
 class Scene:
-    def __init__(self, window):
-        self.window = window
+    def __init__(self, game):
+        self.game = game
 
     def sleep(self, min=1.0, max=2.0):
         time.sleep(random.uniform(min, max))
 
 
 class MainScene(Scene):
-    def __init__(self, window):
-        super().__init__(window)
-        self.weighAnchorAct = Action.ClickAction(window, Template.Template(window, "出击", "./Main/WeighAnchor.png"))
+    def __init__(self, game):
+        super().__init__(game)
+        self.weighAnchorAct = Action.ClickAction(game, Template.Template(game, "出击", "./Main/WeighAnchor.png"))
 
     def enterPrecombat(self):
         self.sleep()
@@ -28,27 +28,33 @@ class MainScene(Scene):
 
 
 class PrecombatScene(Scene):
-    def __init__(self, window):
-        super().__init__(window)
-        self.backAct = Action.ClickAction(window, Template.Template(window, "返回", "./Precombat/Back.png"))
-        self.exerciseAct = Action.ClickAction(window, Template.Template(window, "演习", "./Precombat/Exercise.png"))
-        self.c03s04Act = Action.ClickAction(window, Template.Template(window, "3-4", "./Precombat/C03S04.png"))
-        self.goNowAct = Action.ClickAction(window, Template.Template(window, "立刻前往", "./Precombat/GoNow.png"))
-        self.goNowAct2 = Action.ClickAction(window, Template.Template(window, "立刻前往2", "./Precombat/GoNow2.png"))
+    def __init__(self, game):
+        super().__init__(game)
+        self.backAct = Action.ClickAction(game, Template.Template(game, "返回", "./Precombat/Back.png"))
+        self.exerciseAct = Action.ClickAction(game, Template.Template(game, "演习", "./Precombat/Exercise.png"))
+        self.goNowAct = Action.ClickAction(game, Template.Template(game, "立刻前往", "./Precombat/GoNow.png"))
+        self.goNowAct2 = Action.ClickAction(game, Template.Template(game, "立刻前往2", "./Precombat/GoNow2.png"))
+
+        self.prevPageTarget = Template.SpecifiedTarget(game, gc.Point(40, 300), gc.Size(25, 35))
+        self.nextPageTarget = Template.SpecifiedTarget(game, gc.Point(910, 300), gc.Size(25, 35))
 
         self.chapterTemplList = []
-        self.chapterTemplList.append(Template.Template(window, "第1章", "./Precombat/C01.png"))
-        self.chapterTemplList.append(Template.Template(window, "第2章", "./Precombat/C02.png"))
-        self.chapterTemplList.append(Template.Template(window, "第3章", "./Precombat/C03.png"))
-        self.chapterTemplList.append(Template.Template(window, "第4章", "./Precombat/C04.png"))
-        self.chapterTemplList.append(Template.Template(window, "第5章", "./Precombat/C05.png"))
-        self.chapterTemplList.append(Template.Template(window, "第6章", "./Precombat/C06.png"))
-        self.chapterTemplList.append(Template.Template(window, "第7章", "./Precombat/C07.png"))
-        self.chapterTemplList.append(Template.Template(window, "第8章", "./Precombat/C08.png"))
-        self.chapterTemplList.append(Template.Template(window, "第9章", "./Precombat/C09.png"))
-        self.chapterTemplList.append(Template.Template(window, "第10章", "./Precombat/C10.png"))
-        self.chapterTemplList.append(Template.Template(window, "第11章", "./Precombat/C11.png"))
-        self.chapterTemplList.append(Template.Template(window, "第12章", "./Precombat/C12.png"))
+        self.chapterTemplList.append(Template.Template(game, "第1章", "./Precombat/C01.png"))
+        self.chapterTemplList.append(Template.Template(game, "第2章", "./Precombat/C02.png"))
+        self.chapterTemplList.append(Template.Template(game, "第3章", "./Precombat/C03.png"))
+        self.chapterTemplList.append(Template.Template(game, "第4章", "./Precombat/C04.png"))
+        self.chapterTemplList.append(Template.Template(game, "第5章", "./Precombat/C05.png"))
+        self.chapterTemplList.append(Template.Template(game, "第6章", "./Precombat/C06.png"))
+        self.chapterTemplList.append(Template.Template(game, "第7章", "./Precombat/C07.png"))
+        self.chapterTemplList.append(Template.Template(game, "第8章", "./Precombat/C08.png"))
+        self.chapterTemplList.append(Template.Template(game, "第9章", "./Precombat/C09.png"))
+        self.chapterTemplList.append(Template.Template(game, "第10章", "./Precombat/C10.png"))
+        self.chapterTemplList.append(Template.Template(game, "第11章", "./Precombat/C11.png"))
+        self.chapterTemplList.append(Template.Template(game, "第12章", "./Precombat/C12.png"))
+
+        self.subcapterDict = {}
+        self.subcapterDict[100 * 1 + 1] = Template.SpecifiedTarget(game, gc.Point(160, 376), gc.Size(114, 24))
+        self.subcapterDict[100 * 3 + 4] = Template.SpecifiedTarget(game, gc.Point(507, 306), gc.Size(137, 25))
 
     def back(self):
         self.sleep()
@@ -62,45 +68,59 @@ class PrecombatScene(Scene):
 
     def getChapter(self):
         while True:
-            image = self.window.capture()
+            image = self.game.capture()
             subImage = image.clip(gc.Rect(30, 115, 28, 20))
             for i in range(len(self.chapterTemplList)):
                 chapterTempl = self.chapterTemplList[i]
                 target = chapterTempl.matchOn(subImage)
                 if target.similarity > 0.99:
                     print("当前是第{0}章".format(i + 1))
-                    break
+                    return i + 1
 
     def enterSubcapter(self, capter, subcapter):
         current = self.getChapter()
-
-    def enterC03S04(self):
+        if capter < current:
+            for i in range(current - capter):
+                self.sleep()
+                self.prevPageTarget.click()
+                self.sleep()
+        elif capter > current:
+            for i in range(capter - current):
+                self.sleep()
+                self.nextPageTarget.click()
+                self.sleep()
+        key = 100 * capter + subcapter
+        if key not in self.subcapterDict:
+            print("{0}-{1}不存在。".format(capter, subcapter))
+            return False
+        target = self.subcapterDict[key]
         self.sleep()
-        self.c03s04Act.execute()
+        target.click()
         self.sleep()
         self.goNowAct.execute()
         self.sleep()
         self.goNowAct2.execute()
         self.sleep()
+        return True
 
 
 class ExerciseScene(Scene):
-    def __init__(self, window):
-        super().__init__(window)
-        self.backAct = Action.ClickAction(window, Template.Template(window, "返回", "./Exercise/Back.png"))
-        self.operationAct = Action.ClickAction(window, Template.Template(window, "演习", "./Exercise/Operation.png"),
-                                               specifiedTarget=Template.SpecifiedTarget(window, gc.Point(50, 128),
+    def __init__(self, game):
+        super().__init__(game)
+        self.backAct = Action.ClickAction(game, Template.Template(game, "返回", "./Exercise/Back.png"))
+        self.operationAct = Action.ClickAction(game, Template.Template(game, "演习", "./Exercise/Operation.png"),
+                                               specifiedTarget=Template.SpecifiedTarget(game, gc.Point(50, 128),
                                                                                         gc.Size(160, 228)))
-        self.startExerciseAct = Action.ClickAction(window,
-                                                   Template.Template(window, "开始演习", "./Exercise/StartExercise.png"))
-        self.weighAnchorAct = Action.ClickAction(window, Template.Template(window, "出击", "./Exercise/WeighAnchor.png"))
-        self.ttcAct = Action.ClickAction(window, Template.Template(window, "点击继续", "./Exercise/TTC.png"), 0.85,
-                                         specifiedTarget=Template.SpecifiedTarget(window, gc.Point(50, 420),
+        self.startExerciseAct = Action.ClickAction(game,
+                                                   Template.Template(game, "开始演习", "./Exercise/StartExercise.png"))
+        self.weighAnchorAct = Action.ClickAction(game, Template.Template(game, "出击", "./Exercise/WeighAnchor.png"))
+        self.ttcAct = Action.ClickAction(game, Template.Template(game, "点击继续", "./Exercise/TTC.png"), 0.85,
+                                         specifiedTarget=Template.SpecifiedTarget(game, gc.Point(50, 420),
                                                                                   gc.Size(850, 130)))
-        self.ttcAct2 = Action.ClickAction(window, Template.Template(window, "点击继续2", "./Exercise/TTC2.png"),
-                                          specifiedTarget=Template.SpecifiedTarget(window, gc.Point(50, 420),
+        self.ttcAct2 = Action.ClickAction(game, Template.Template(game, "点击继续2", "./Exercise/TTC2.png"),
+                                          specifiedTarget=Template.SpecifiedTarget(game, gc.Point(50, 420),
                                                                                    gc.Size(850, 130)))
-        self.confirmAct = Action.ClickAction(window, Template.Template(window, "确认", "./Exercise/Confirm.png"))
+        self.confirmAct = Action.ClickAction(game, Template.Template(game, "确认", "./Exercise/Confirm.png"))
 
     def back(self):
         self.sleep()
@@ -127,25 +147,43 @@ class ExerciseScene(Scene):
 
 
 class SubchapterScene(Scene):
-    def __init__(self, window):
-        super().__init__(window)
+    def __init__(self, game):
+        super().__init__(game)
 
 
 class C01S01Scene(SubchapterScene):
-    def __init__(self, window):
-        super().__init__(window)
+    def __init__(self, game):
+        super().__init__(game)
+        self.enterAmbushTarget = Template.SpecifiedTarget(game, gc.Point(330, 252), gc.Size(87, 64))
+        self.leaveAmbushTarget = Template.SpecifiedTarget(game, gc.Point(238, 252), gc.Size(83, 64))
+        self.meetAct = Action.ClickAction(game, Template.Template(game, "迎击", "./Subchapter/Meet.png"))
+        self.weighAnchorAct = Action.ClickAction(game, Template.Template(game, "出击", "./Subchapter/WeighAnchor.png"))
+
+    def enterAmbush(self):
+        self.sleep(3.0, 5.0)
+        self.enterAmbushTarget.click()
+        self.sleep()
+        self.meetAct.execute()
+        self.sleep()
+        self.weighAnchorAct.execute()
+        self.sleep()
+
+    def leaveAmbush(self):
+        self.sleep()
+        self.leaveAmbushTarget.click()
+        self.sleep()
 
 
 class C03S04Scene(SubchapterScene):
-    def __init__(self, window):
-        super().__init__(window)
-        self.recFleetTempl = Template.Template(window, "侦查舰队", "./Subchapter/RecFleet.png",
+    def __init__(self, game):
+        super().__init__(game)
+        self.recFleetTempl = Template.Template(game, "侦查舰队", "./Subchapter/RecFleet.png",
                                                "./Subchapter/RecFleetMask.png")
-        self.mainFleetTempl = Template.Template(window, "主力舰队", "./Subchapter/MainFleet.png",
+        self.mainFleetTempl = Template.Template(game, "主力舰队", "./Subchapter/MainFleet.png",
                                                 "./Subchapter/MainFleetMask.png")
-        self.airFleetTempl = Template.Template(window, "航空舰队", "./Subchapter/AirFleet.png",
+        self.airFleetTempl = Template.Template(game, "航空舰队", "./Subchapter/AirFleet.png",
                                                "./Subchapter/AirFleetMask.png")
-        self.weighAnchorTempl = Template.Template(window, "出击", "./Subchapter/WeighAnchor.png")
+        self.weighAnchorTempl = Template.Template(game, "出击", "./Subchapter/WeighAnchor.png")
         self.mapX = 74
         self.mapY = 250 - (448 - 304)
         self.tileSize = 110
@@ -156,7 +194,7 @@ class C03S04Scene(SubchapterScene):
 
     def enterBattle(self):
         while True:
-            image = self.window.capture()
+            image = self.game.capture()
 
             map = [[0 for i in range(self.columns)] for i in range(self.rows)]
             recFleetTarget = self.recFleetTempl.matchOn(image)
@@ -206,30 +244,22 @@ class C03S04Scene(SubchapterScene):
 
 
 class BattleScene(Scene):
-    def __init__(self, window):
-        super().__init__(window)
-        self.ttcTempl = Template.Template(window, "点击继续", "./Battle/TTC.png")
-        self.performanceTempl = Template.Template(window, "性能", "./Battle/Performance.png")
-        self.confirmTempl = Template.Template(window, "确认", "./Battle/Confirm.png")
+    def __init__(self, game):
+        super().__init__(game)
+        self.ttcAct = Action.ClickAction(game, Template.Template(game, "点击继续", "./Battle/TTC.png"), 0.85,
+                                         specifiedTarget=Template.SpecifiedTarget(game, gc.Point(50, 420),
+                                                                                  gc.Size(850, 130)))
+        self.ttcAct2 = Action.ClickAction(game, Template.Template(game, "点击继续2", "./Battle/TTC2.png"),
+                                          specifiedTarget=Template.SpecifiedTarget(game, gc.Point(50, 420),
+                                                                                   gc.Size(850, 130)))
+        self.performanceAct = Action.ClickAction(game, Template.Template(game, "性能", "./Battle/Performance.png"))
+        self.confirmAct = Action.ClickAction(game, Template.Template(game, "确认", "./Battle/Confirm.png"))
 
     def leaveBattle(self):
-        ttcTarget = self.matchButton(self.ttcTempl, 310.0, 0.98)
-        if ttcTarget is not None:
-            ttcTarget.click()
-            self.sleep()
-
-            ttcTarget = self.matchButton(self.ttcTempl, 5.0, 0.98)
-            if ttcTarget is not None:
-                ttcTarget.click()
-                self.sleep()
-
-                performanceTarget = self.matchButton(self.performanceTempl, 5.0, 0.98)
-                if performanceTarget is not None:
-                    target = Template.Target(self.window, gc.Point(100, 100), gc.Size(800, 320))
-                    target.click()
-                    self.sleep()
-
-                confirmTarget = self.matchButton(self.confirmTempl, 5.0, 0.98)
-                if confirmTarget is not None:
-                    confirmTarget.click()
-                    self.sleep()
+        self.sleep()
+        self.ttcAct.execute()
+        self.sleep()
+        self.ttcAct2.execute()
+        self.sleep()
+        self.confirmAct.execute()
+        self.sleep()

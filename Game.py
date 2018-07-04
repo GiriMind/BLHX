@@ -7,7 +7,7 @@ import GraphCap as gc
 import GraphCapCon as gcc
 
 
-class DesktopWindow:
+class Game:
     def __init__(self):
         # print("窗口列表：")
         # windowList = gc.Window.EnumWindows()
@@ -24,7 +24,6 @@ class DesktopWindow:
         if self.window.isZoomed() or self.window.isIconic():
             self.window.restore()
         self.window.setSize(gc.Size(974, 634))
-
         self.capturer = gc.DesktopCapturer()
         self.image = gc.Image()
         self.rect = gc.Rect()
@@ -36,13 +35,11 @@ class DesktopWindow:
             # print("窗口位置：x={0}, y={1}, width={2}, height={3}".format(
             #    self.rect.x, self.rect.y, self.rect.width, self.rect.height))
             if not self.capturer.capture(self.image, self.rect):
-                print("捕获图像失败：桌面超时未更新，或者窗口位置错误。")
+                print("捕获图像失败，桌面超时未更新，或者窗口位置错误。")
                 time.sleep(0.1)
                 continue
-            # print("捕获位置：x={0}, y={1}, width={2}, height={3}".format(
-            #    self.rect.x, self.rect.y, self.rect.width, self.rect.height))
             if self.image.getType() != gcc.IT_8UC4:
-                raise Exception("图像格式错误：请将桌面设置为32位色。")
+                raise Exception("图像格式错误，请设置桌面为32位色。")
             return self.image
 
     def click(self, location, size):
