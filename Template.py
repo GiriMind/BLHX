@@ -32,7 +32,7 @@ class Template:
 
 
 class Target:
-    def __init__(self, game, template, result, ):
+    def __init__(self, game, template, result):
         self.game = game
         self.template = template
         self.result = result
