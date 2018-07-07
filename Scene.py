@@ -74,7 +74,6 @@ class PrecombatScene(Scene):
                 chapterTempl = self.chapterTemplList[i]
                 target = chapterTempl.matchOn(subImage)
                 if target.similarity > 0.99:
-                    print("当前是第{0}章".format(i + 1))
                     return i + 1
 
     def enterSubcapter(self, capter, subcapter):
@@ -241,6 +240,7 @@ class C03S04Scene(SubchapterScene):
                     line += " %d " % id
                 print(line)
             print("--------------------------------------------")
+            self.sleep()
 
 
 class BattleScene(Scene):

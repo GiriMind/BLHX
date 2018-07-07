@@ -9,16 +9,16 @@ class Template:
         self.game = game
         self.name = name
         self.templImage = gc.Image()
-        self.templImage.read(templName, gcc.RF_UNCHANGED)
-        if self.templImage.getType() != gcc.IT_8UC4:
-            raise Exception("模板图片格式错误，请保存为32位色。\n{0}".format(templName))
+        self.templImage.read(templName)
+        if self.templImage.getType() != gcc.IT_8UC3:
+            raise Exception("模板图片格式错误，请保存为24位色。\n{0}".format(templName))
         if maskName is None:
             self.maskImage = None
         else:
             self.maskImage = gc.Image()
-            self.maskImage.read(maskName, gcc.RF_UNCHANGED)
-            if self.maskImage.getType() != gcc.IT_8UC4:
-                raise Exception("掩码图片格式错误，请保存为32位色。\n{0}".format(maskName))
+            self.maskImage.read(maskName)
+            if self.maskImage.getType() != gcc.IT_8UC3:
+                raise Exception("掩码图片格式错误，请保存为24位色。\n{0}".format(maskName))
 
     def getSize(self):
         return self.templImage.getSize()
@@ -32,24 +32,25 @@ class Template:
 
 
 class Target:
-    def __init__(self, game, template, result):
+    def __init__(self, game, template, result, ):
         self.game = game
         self.template = template
         self.result = result
         minMaxLoc = result.minMaxLoc()
         self.location = minMaxLoc.maxLoc
+        if self.location.x < 0 or self.location.y < 0:
+            raise Exception("匹配到负数坐标({0},{1})，为什么会变成这样呢……".format(self.location.x, self.location.y))
         self.similarity = minMaxLoc.maxVal
         print("[{0}]的相似度是{1}。".format(self.template.name, self.similarity))
 
     def getSize(self):
         return self.template.getSize()
 
+    def getRect(self):
+        return gc.Rect(self.location, self.getSize())
+
     def next(self):
-        try:
-            self.result.floodFill(self.location, gc.Scalar(0.0))
-        except Exception as e:
-            print(e)
-            print("location:{0},{1}".format(self.location.x, self.location.y))
+        self.result.floodFill(self.location, gc.Scalar(0.0))
         return Target(self.game, self.template, self.result)
 
     def click(self):

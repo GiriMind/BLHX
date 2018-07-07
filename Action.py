@@ -23,11 +23,14 @@ class ClickAction(Action):
     def execute(self):
         beginTime = time.time()
         while time.time() - beginTime < self.timeout:
-            image = self.game.capture()
-            target = self.template.matchOn(image)
-            if target.similarity > self.threshold:
-                self.click(target)
-                return True
+            try:
+                image = self.game.capture()
+                target = self.template.matchOn(image)
+                if target.similarity > self.threshold:
+                    self.click(target)
+                    return True
+            except Exception as e:
+                print(e)
         return False
 
     def click(self, target):
