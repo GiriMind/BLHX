@@ -16,9 +16,9 @@ class Action:
 
 
 class ClickAction(Action):
-    def __init__(self, game, template, threshold=0.95, timeout=sys.float_info.max, specifiedTarget=None):
+    def __init__(self, game, template, threshold=0.95, timeout=sys.float_info.max, specifiedRect=None):
         super().__init__(game, template, threshold, timeout)
-        self.specifiedTarget = specifiedTarget
+        self.specifiedRect = specifiedRect
 
     def execute(self):
         beginTime = time.time()
@@ -34,7 +34,7 @@ class ClickAction(Action):
         return False
 
     def click(self, target):
-        if self.specifiedTarget is not None:
-            self.specifiedTarget.click()
+        if self.specifiedRect is not None:
+            self.game.click(self.specifiedRect)
         else:
-            target.click()
+            self.game.click(target.getRect())

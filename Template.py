@@ -5,8 +5,7 @@ import GraphCapCon as gcc
 
 
 class Template:
-    def __init__(self, game, name, templName, maskName=None):
-        self.game = game
+    def __init__(self, name, templName, maskName=None):
         self.name = name
         self.templImage = gc.Image()
         self.templImage.read(templName)
@@ -28,12 +27,11 @@ class Template:
             result = image.matchTemplate(self.templImage, gcc.MTM_CCOEFF_NORMED)
         else:
             result = image.matchTemplate(self.templImage, gcc.MTM_CCORR_NORMED, self.maskImage)
-        return Target(self.game, self, result)
+        return Target(self, result)
 
 
 class Target:
-    def __init__(self, game, template, result):
-        self.game = game
+    def __init__(self, template, result):
         self.template = template
         self.result = result
         minMaxLoc = result.minMaxLoc()
@@ -51,17 +49,4 @@ class Target:
 
     def next(self):
         self.result.floodFill(self.location, gc.Scalar(0.0))
-        return Target(self.game, self.template, self.result)
-
-    def click(self):
-        self.game.click(self.location, self.template.getSize())
-
-
-class SpecifiedTarget:
-    def __init__(self, game, location, size):
-        self.game = game
-        self.location = location
-        self.size = size
-
-    def click(self):
-        self.game.click(self.location, self.size)
+        return Target(self.template, self.result)

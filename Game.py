@@ -41,15 +41,17 @@ class Game:
                 print("捕获图像失败，桌面超时未更新，或者窗口位置错误。")
                 time.sleep(0.1)
                 continue
-            if self.image.getType() == gcc.IT_8UC3:
-                return self.image
-            else:
+            if self.image.getType() == gcc.IT_8UC4:
                 self.image.cvtColor(self.image24, gcc.CCC_BGRA2BGR)
                 return self.image24
+            elif self.image.getType() == gcc.IT_8UC3:
+                return self.image
+            else:
+                raise Exception("不支持的图像格式：{0}。".format(self.image.getType()))
 
-    def click(self, location, size):
-        x = self.rect.x + location.x + random.randint(0, size.width - 1)
-        y = self.rect.y + location.y + random.randint(0, size.height - 1)
+    def click(self, rect):
+        x = self.rect.x + rect.x + random.randint(0, rect.width - 1)
+        y = self.rect.y + rect.y + random.randint(0, rect.height - 1)
         self.input.setMousePos(gc.Point(x, y))
         self.input.mouseLeftDown()
         self.input.mouseLeftUp()
