@@ -13,17 +13,19 @@ class Game:
         # windowList = gc.Window.EnumWindows()
         # for i in range(len(windowList)):
         #    window = windowList[i]
-        #    print("{0}.[{1}]{2}".format(i + 1, window.getPid(), window.getName()))
+        #    print("{0}.[{1}]{2}".format(i + 1, window.getProcessId(), window.getName()))
         # j = int(input("请输入窗口编号："))
         # self.window = windowList[j - 1]
         try:
             self.mainWindow = gc.Window.FindByName("BlueStacks")
-            # self.pluginWindow = self.mainWindow.findChildByName("BlueStacks Android PluginAndroid")
-            # self.appWindow = self.pluginWindow.findChildByName("_ctl.Window")
+            self.pluginWindow = self.mainWindow.findChildByName("BlueStacks Android PluginAndroid")
+            self.appWindow = self.pluginWindow.findChildByName("_ctl.Window")
+            dc = gc.Direct3DCapturer()
+            dc.test(self.appWindow)
         except Exception as e:
-            print("查找窗口失败，请先运行模拟器。")
+            print("查找游戏窗口失败，请先运行游戏。")
             raise
-        if self.mainWindow.isZoomed() or self.mainWindow.isIconic():
+        if self.mainWindow.isMinimized() or self.mainWindow.isMaximized():
             self.mainWindow.restore()
         self.mainWindow.setSize(gc.Size(974, 634))
         self.capturer = gc.DesktopCapturer()

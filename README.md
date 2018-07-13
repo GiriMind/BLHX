@@ -4,7 +4,7 @@
 
 ## 系统要求
 
-Win8或者以上。
+Win8 64位或者以上，安装[VC++2017可再发行程序包](https://aka.ms/vs/15/release/vc_redist.x64.exe)。
 
 ## 模拟器
 
@@ -16,11 +16,11 @@ Win8或者以上。
 
 ## 使用
 
-下载[发布包](https://github.com/GiriMind/BLHX/releases/download/0.0.1/BLHX.7z)，下载最新的[脚本代码](https://github.com/GiriMind/BLHX/archive/master.zip)覆盖之。
+下载[发布包](https://github.com/GiriMind/BLHX/releases/download/0.0.2/BLHX.7z)，下载最新的[脚本代码](https://github.com/GiriMind/BLHX/archive/master.zip)覆盖之。
 
 登录游戏到主界面。
 
-运行`BLHX.bat`，选择任务。
+以管理员身份运行`BLHX.bat`，选择任务。
 
 ## 已实现功能
 
