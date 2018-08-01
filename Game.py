@@ -20,8 +20,6 @@ class Game:
             self.mainWindow = gc.Window.FindByName("BlueStacks")
             self.pluginWindow = self.mainWindow.findChildByName("BlueStacks Android PluginAndroid")
             self.appWindow = self.pluginWindow.findChildByName("_ctl.Window")
-            dc = gc.Direct3DCapturer()
-            dc.test(self.appWindow)
         except Exception as e:
             print("查找游戏窗口失败，请先运行游戏。")
             raise
