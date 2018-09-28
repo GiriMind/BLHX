@@ -16,7 +16,7 @@ Win8 64位或者以上，安装[VC++2017可再发行程序包](https://aka.ms/vs
 
 ## 使用
 
-下载[发布包](https://github.com/GiriMind/BLHX/releases/download/0.0.3/BLHX.7z)，下载最新的[脚本代码](https://github.com/GiriMind/BLHX/archive/master.zip)覆盖之。
+下载[发布包](https://github.com/GiriMind/BLHX/releases/download/0.0.4/BLHX.7z)，下载最新的[脚本代码](https://github.com/GiriMind/BLHX/archive/master.zip)覆盖之。
 
 登录游戏到主界面。
 
