@@ -27,6 +27,18 @@ class ExerciseTask(Task):
         exerciseScene.back()
         precombatScene.back()
 
+class MaidTask(Task):
+    def __init__(self, game):
+        super().__init__(game)
+
+    def run(self):
+        mainScene = Scene.MainScene(self.game)
+        maidScene = Scene.MaidScene(self.game)
+        mainScene.enterMaid()
+        while True:
+            maidScene.enterExercise()
+            maidScene.leaveExercise()
+
 
 class C01S01LoopTask(Task):
     def __init__(self, game):

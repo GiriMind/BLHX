@@ -8,9 +8,9 @@ Win8 64位或者以上，安装[VC++2017可再发行程序包](https://aka.ms/vs
 
 ## 模拟器
 
-暂时限定BlueStacks。
+暂时限定原版的BlueStacks，因为部分坐标写死了。
 
-推荐挂代理去[bluestacks.com](https://www.bluestacks.com/)下载原版的BlueStacks，使用[BSTweaker](https://forum.xda-developers.com/general/general/bluestacks-tweaker-2-tool-modifing-t3622681)关闭Google账号登录要求。
+需要挂代理去[bluestacks.com](https://www.bluestacks.com/)下载原版的BlueStacks，使用[BSTweaker](https://forum.xda-developers.com/general/general/bluestacks-tweaker-2-tool-modifing-t3622681)关闭Google账号登录要求。
 
 脚本会自动设置模拟器窗口分辨率为`974*634`，即游戏分辨率为`960*540`，以获得最佳的图像识别效果。
 
@@ -27,3 +27,9 @@ Win8 64位或者以上，安装[VC++2017可再发行程序包](https://aka.ms/vs
 1. 打5次演习。
 
 2. 1-1伏击刷好感度
+
+3. 战斗！皇家女仆队 高级演习
+
+## 问题
+
+选择敌舰的那个3D场景无解

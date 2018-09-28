@@ -20,10 +20,16 @@ class MainScene(Scene):
     def __init__(self, game):
         super().__init__(game)
         self.weighAnchorAct = Action.ClickAction(game, Template.Template("出击", "./Main/WeighAnchor.png"))
+        self.maidAct = Action.ClickAction(game, Template.Template("演习作战", "./Main/Maid.png"))
 
     def enterPrecombat(self):
         self.sleep()
         self.weighAnchorAct.execute()
+        self.sleep()
+
+    def enterMaid(self):
+        self.sleep()
+        self.maidAct.execute()
         self.sleep()
 
 
@@ -119,7 +125,7 @@ class ExerciseScene(Scene):
         self.ttcAct = Action.ClickAction(game, Template.Template("点击继续", "./Exercise/TTC.png"), 0.85,
                                          specifiedRect=gc.Rect(50, 420, 850, 130))
         self.ttcAct2 = Action.ClickAction(game, Template.Template("点击继续2", "./Exercise/TTC2.png"),
-                                          specifiedRect=gc.Point(50, 420, 850, 130))
+                                          specifiedRect=gc.Rect(50, 420, 850, 130))
         self.confirmAct = Action.ClickAction(game, Template.Template("确认", "./Exercise/Confirm.png"))
 
     def back(self):
@@ -143,6 +149,19 @@ class ExerciseScene(Scene):
         self.ttcAct2.execute()
         self.sleep()
         self.confirmAct.execute()
+        self.sleep()
+
+
+class MaidScene(ExerciseScene):
+    def __init__(self, game):
+        super().__init__(game)
+        self.advancedAct = Action.ClickAction(game, Template.Template("高级演习", "./Events/Advanced.png"))
+
+    def enterExercise(self):
+        self.sleep()
+        self.advancedAct.execute()
+        self.sleep()
+        self.weighAnchorAct.execute()
         self.sleep()
 
 
