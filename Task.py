@@ -27,6 +27,7 @@ class ExerciseTask(Task):
         exerciseScene.back()
         precombatScene.back()
 
+
 class MaidTask(Task):
     def __init__(self, game):
         super().__init__(game)
@@ -62,12 +63,12 @@ class C03S04Task(Task):
         super().__init__(game)
 
     def run(self):
-        # mainScene = Scene.MainScene(self.game)
-        # precombatScene = Scene.PrecombatScene(self.game)
+        mainScene = Scene.MainScene(self.game)
+        precombatScene = Scene.PrecombatScene(self.game)
         c03s04Scene = Scene.C03S04Scene(self.game)
-        # battleScene = Scene.BattleScene(self.game)
-        # while True:
-        #    precombatScene.enterSubcapter(3, 4)
-        #    while c03s04Scene.bossExist:
-        c03s04Scene.enterBattle()
-        #        battleScene.leaveBattle()
+        battleScene = Scene.BattleScene(self.game)
+        while True:
+            precombatScene.enterSubcapter(3, 4)
+            while c03s04Scene.bossExist:
+                c03s04Scene.enterBattle()
+                battleScene.leaveBattle()

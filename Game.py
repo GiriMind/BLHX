@@ -4,7 +4,6 @@ import time
 import random
 
 import GraphCap as gc
-import GraphCapCon as gcc
 
 
 class Game:
@@ -28,7 +27,7 @@ class Game:
         self.mainWindow.setSize(gc.Size(974, 634))
         self.capturer = gc.DesktopCapturer()
         self.image = gc.Image()
-        self.image24 = gc.Image()
+        # self.image24 = gc.Image()
         self.rect = gc.Rect()
         self.input = gc.DesktopInput()
 
@@ -41,17 +40,22 @@ class Game:
                 print("捕获图像失败，桌面超时未更新，或者窗口位置错误。")
                 time.sleep(0.1)
                 continue
-            if self.image.getType() == gcc.IT_8UC4:
-                self.image.cvtColor(self.image24, gcc.CCC_BGRA2BGR)
-                return self.image24
-            elif self.image.getType() == gcc.IT_8UC3:
-                return self.image
-            else:
-                raise Exception("不支持的图像格式：{0}。".format(self.image.getType()))
+            # if self.image.getType() == gcc.IT_8UC4:
+            #    self.image.cvtColor(self.image24, gcc.CCC_BGRA2BGR)
+            #    return self.image24
+            # elif self.image.getType() == gcc.IT_8UC3:
+            #    return self.image
+            # else:
+            #    raise Exception("不支持的图像格式：{0}。".format(self.image.getType()))
+            return self.image
 
-    def click(self, rect):
-        x = self.rect.x + rect.x + random.randint(0, rect.width - 1)
-        y = self.rect.y + rect.y + random.randint(0, rect.height - 1)
+    def click(self, pos, size):
+        if size is None:
+            x = self.rect.x + pos.x
+            y = self.rect.y + pos.y
+        else:
+            x = self.rect.x + pos.x + random.randint(0, size.width - 1)
+            y = self.rect.y + pos.y + random.randint(0, size.height - 1)
         self.input.setMousePos(gc.Point(x, y))
         self.input.mouseLeftDown()
         self.input.mouseLeftUp()

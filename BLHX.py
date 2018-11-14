@@ -17,7 +17,7 @@ def BLHX():
     print("1.打5次演习")
     print("2.1-1伏击刷好感度")
     print("3.战斗！皇家女仆队 高级演习")
-    #print("4.3-4捞吃喝")
+    print("4.3-4捞吃喝")
     i = int(input("请输入任务编号："))
     if i == 1:
         task = Task.ExerciseTask(game)

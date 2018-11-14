@@ -4,7 +4,7 @@
 
 ## 系统要求
 
-Win8 64位或者以上，安装[VC++2017可再发行程序包](https://aka.ms/vs/15/release/vc_redist.x64.exe)。
+Win8 64位或者以上，安装[VC++2017可再发行程序包](https://support.microsoft.com/zh-cn/help/2977003/the-latest-supported-visual-c-downloads)。
 
 ## 模拟器
 
@@ -20,7 +20,7 @@ Win8 64位或者以上，安装[VC++2017可再发行程序包](https://aka.ms/vs
 
 登录游戏到主界面。
 
-以管理员身份运行`BLHX.bat`，选择任务。
+运行`BLHX.bat`，选择任务。
 
 ## 已实现功能
 
