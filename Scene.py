@@ -20,6 +20,7 @@ class Scene:
         target = template.matchOn(scene)
         if target is not None:
             target.click()
+            print("匹配[{0}]成功。".format(template.name))
             return True
         else:
             print("匹配[{0}]失败。".format(template.name))
@@ -34,6 +35,18 @@ class Scene:
             if self.clickOnce(template):
                 return True
 
+    def matchList(self, templates):
+        scene = self.game.capture()
+        for i in range(len(templates)):
+            template = templates[i]
+            target = template.matchOn(scene)
+            if target is not None:
+                print("匹配[{0}]成功。".format(template.name))
+                return True, i + 1, target
+            else:
+                print("匹配[{0}]失败。".format(template.name))
+        return False, -1, None
+
 
 class MainScene(Scene):
     def __init__(self, game):
@@ -45,7 +58,7 @@ class MainScene(Scene):
         self.click(self.weighAnchor)
 
     def enterMaid(self):
-        self.click(self.maid)
+        return self.click(self.maid, 5.0)
 
 
 class PrecombatScene(Scene):
@@ -56,23 +69,23 @@ class PrecombatScene(Scene):
         self.goNow = Template.Template(game, "立刻前往", "./Precombat/GoNow.png")
         self.goNow2 = Template.Template(game, "立刻前往2", "./Precombat/GoNow2.png")
 
-        self.chapterTemplates = []
-        self.chapterTemplates.append(Template.Template(game, "第1章", "./Precombat/C01.png"))
-        self.chapterTemplates.append(Template.Template(game, "第2章", "./Precombat/C02.png"))
-        self.chapterTemplates.append(Template.Template(game, "第3章", "./Precombat/C03.png"))
-        self.chapterTemplates.append(Template.Template(game, "第4章", "./Precombat/C04.png"))
-        self.chapterTemplates.append(Template.Template(game, "第5章", "./Precombat/C05.png"))
-        self.chapterTemplates.append(Template.Template(game, "第6章", "./Precombat/C06.png"))
-        self.chapterTemplates.append(Template.Template(game, "第7章", "./Precombat/C07.png"))
-        self.chapterTemplates.append(Template.Template(game, "第8章", "./Precombat/C08.png"))
-        self.chapterTemplates.append(Template.Template(game, "第9章", "./Precombat/C09.png"))
-        self.chapterTemplates.append(Template.Template(game, "第10章", "./Precombat/C10.png"))
-        self.chapterTemplates.append(Template.Template(game, "第11章", "./Precombat/C11.png"))
-        self.chapterTemplates.append(Template.Template(game, "第12章", "./Precombat/C12.png"))
+        self.chapters = []
+        self.chapters.append(Template.Template(game, "第1章", "./Precombat/Chapter01.png"))
+        self.chapters.append(Template.Template(game, "第2章", "./Precombat/Chapter02.png"))
+        self.chapters.append(Template.Template(game, "第3章", "./Precombat/Chapter03.png"))
+        self.chapters.append(Template.Template(game, "第4章", "./Precombat/Chapter04.png"))
+        self.chapters.append(Template.Template(game, "第5章", "./Precombat/Chapter05.png"))
+        self.chapters.append(Template.Template(game, "第6章", "./Precombat/Chapter06.png"))
+        self.chapters.append(Template.Template(game, "第7章", "./Precombat/Chapter07.png"))
+        self.chapters.append(Template.Template(game, "第8章", "./Precombat/Chapter08.png"))
+        self.chapters.append(Template.Template(game, "第9章", "./Precombat/Chapter09.png"))
+        self.chapters.append(Template.Template(game, "第10章", "./Precombat/Chapter10.png"))
+        self.chapters.append(Template.Template(game, "第11章", "./Precombat/Chapter11.png"))
+        self.chapters.append(Template.Template(game, "第12章", "./Precombat/Chapter12.png"))
 
-        self.subcapterTargets = {}
-        self.subcapterTargets[100 * 1 + 1] = Template.Target(game, gc.Point(160, 376), gc.Size(114, 24))
-        self.subcapterTargets[100 * 3 + 4] = Template.Target(game, gc.Point(507, 306), gc.Size(137, 25))
+        self.subcapters = {}
+        self.subcapters[100 * 1 + 1] = Template.Target(game, gc.Point(160, 376), gc.Size(114, 24))
+        self.subcapters[100 * 3 + 4] = Template.Target(game, gc.Point(507, 306), gc.Size(137, 25))
 
         self.prevPageTarget = Template.Target(game, gc.Point(40, 300), gc.Size(25, 35))
         self.nextPageTarget = Template.Target(game, gc.Point(910, 300), gc.Size(25, 35))
@@ -83,34 +96,25 @@ class PrecombatScene(Scene):
     def enterExercise(self):
         self.click(self.exercise)
 
-    def getChapter(self):
-        while True:
-            scene = self.game.capture()
-            subScene = scene.clip(gc.Rect(30, 115, 28, 20))
-            for i in range(len(self.chapterTemplates)):
-                template = self.chapterTemplates[i]
-                target = template.matchOn(subScene)
-                if target is not None:
-                    return i + 1
-
-    def enterSubcapter(self, capter, subcapter):
-        current = self.getChapter()
-        print("当前是第{0}章".format(current))
-        if capter < current:
-            for i in range(current - capter):
+    def enterSubcapter(self, c, sc):
+        time.sleep(5.0)
+        ret, curChapter, _ = self.matchList(self.chapters)
+        if not ret:
+            print("获取海图章数失败。")
+            return False
+        if c < curChapter:
+            for i in range(curChapter - c):
                 self.prevPageTarget.click()
-        if capter > current:
-            for i in range(capter - current):
+                time.sleep(3.0)
+        if c > curChapter:
+            for i in range(c - curChapter):
                 self.nextPageTarget.click()
-        current = self.getChapter()
-        if current != capter:
-            print("第{0}章不存在。".format(capter))
+                time.sleep(3.0)
+        key = 100 * c + sc
+        if key not in self.subcapters:
+            print("{0}-{1}模板图片不存在。".format(c, sc))
             return False
-        key = 100 * capter + subcapter
-        if key not in self.subcapterTargets:
-            print("{0}-{1}不存在。".format(capter, subcapter))
-            return False
-        subcapterTarget = self.subcapterTargets[key]
+        subcapterTarget = self.subcapters[key]
         subcapterTarget.click()
         self.click(self.goNow)
         self.click(self.goNow2)
@@ -153,12 +157,7 @@ class MaidScene(ExerciseScene):
         self.click(self.weighAnchor)
 
 
-class SubchapterScene(Scene):
-    def __init__(self, game):
-        super().__init__(game)
-
-
-class C01S01Scene(SubchapterScene):
+class C01S01Scene(Scene):
     def __init__(self, game):
         super().__init__(game)
         self.enterAmbushTarget = Template.Target(game, gc.Point(330, 252), gc.Size(87, 64))
@@ -167,17 +166,19 @@ class C01S01Scene(SubchapterScene):
         self.weighAnchor = Template.Template(game, "出击", "./Subchapter/WeighAnchor.png")
 
     def enterAmbush(self):
-        self.sleep(3.0, 5.0)
+        time.sleep(5.0)
         self.enterAmbushTarget.click()
+        time.sleep(5.0)
         self.click(self.meet)
         self.click(self.weighAnchor)
 
     def leaveAmbush(self):
+        time.sleep(5.0)
         self.leaveAmbushTarget.click()
-        self.sleep(3.0, 5.0)
+        time.sleep(5.0)
 
 
-class C03S04Scene(SubchapterScene):
+class C03S04Scene(Scene):
     def __init__(self, game):
         super().__init__(game)
         self.recFleetTempl = Template.Template("侦查舰队", "./Subchapter/RecFleet.png", "./Subchapter/RecFleetMask.png")
@@ -256,5 +257,5 @@ class BattleScene(Scene):
     def leaveBattle(self):
         self.click(self.ttc)
         self.click(self.ttc2)
-        self.click(self.performance, 3.0)
+        self.click(self.performance, 5.0)
         self.click(self.confirm)

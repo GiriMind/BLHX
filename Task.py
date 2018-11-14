@@ -35,7 +35,8 @@ class MaidTask(Task):
     def run(self):
         mainScene = Scene.MainScene(self.game)
         maidScene = Scene.MaidScene(self.game)
-        mainScene.enterMaid()
+        if not mainScene.enterMaid():
+            return
         while True:
             maidScene.enterExercise()
             maidScene.leaveExercise()
@@ -51,7 +52,8 @@ class C01S01LoopTask(Task):
         c01s01Scene = Scene.C01S01Scene(self.game)
         battleScene = Scene.BattleScene(self.game)
         mainScene.enterPrecombat()
-        precombatScene.enterSubcapter(1, 1)
+        if not precombatScene.enterSubcapter(1, 1):
+            return
         while True:
             c01s01Scene.enterAmbush()
             battleScene.leaveBattle()
