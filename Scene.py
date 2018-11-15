@@ -15,25 +15,26 @@ class Scene:
     def sleep(self, min=1.0, max=2.0):
         time.sleep(random.uniform(min, max))
 
-    def clickOnce(self, template):
-        scene = self.game.capture()
-        target = template.matchOn(scene)
-        if target is not None:
-            target.click()
-            print("匹配[{0}]成功。".format(template.name))
-            return True
-        else:
-            print("匹配[{0}]失败。".format(template.name))
-            return False
+    def match(self, template, timeout=sys.float_info.max):
+        beginTime = time.time()
+        while time.time() - beginTime < timeout:
+            scene = self.game.capture()
+            target = template.matchOn(scene)
+            if target is not None:
+                print("匹配[{0}]成功。".format(template.name))
+                return target
+            else:
+                print("匹配[{0}]失败。".format(template.name))
+        print("匹配[{0}]超时。".format(template.name))
+        return None
 
     def click(self, template, timeout=sys.float_info.max):
-        beginTime = time.time()
-        while True:
-            if time.time() - beginTime > timeout:
-                print("匹配[{0}]超时。".format(template.name))
-                return False
-            if self.clickOnce(template):
-                return True
+        target = self.match(template, timeout)
+        if target is not None:
+            target.click()
+            return True
+        else:
+            return False
 
     def matchList(self, templates):
         scene = self.game.capture()
@@ -42,17 +43,18 @@ class Scene:
             target = template.matchOn(scene)
             if target is not None:
                 print("匹配[{0}]成功。".format(template.name))
-                return True, i + 1, target
+                return target, i
             else:
                 print("匹配[{0}]失败。".format(template.name))
-        return False, -1, None
+        return None, -1
 
 
 class MainScene(Scene):
     def __init__(self, game):
         super().__init__(game)
         self.weighAnchor = Template.Template(game, "出击", "./Main/WeighAnchor.png")
-        self.maid = Template.Template(game, "演习作战", "./Main/Maid.png")
+
+        self.maid = Template.Template(game, "演习作战", "./Events/Maid.png")
 
     def enterPrecombat(self):
         self.click(self.weighAnchor)
@@ -64,7 +66,7 @@ class MainScene(Scene):
 class PrecombatScene(Scene):
     def __init__(self, game):
         super().__init__(game)
-        self.back = Template.Template(game, "返回", "./Precombat/Back.png")
+        self.back1 = Template.Template(game, "返回", "./Precombat/Back.png")
         self.exercise = Template.Template(game, "演习", "./Precombat/Exercise.png")
         self.goNow = Template.Template(game, "立刻前往", "./Precombat/GoNow.png")
         self.goNow2 = Template.Template(game, "立刻前往2", "./Precombat/GoNow2.png")
@@ -91,17 +93,18 @@ class PrecombatScene(Scene):
         self.nextPageTarget = Template.Target(game, gc.Point(910, 300), gc.Size(25, 35))
 
     def back(self):
-        self.click(self.back)
+        self.click(self.back1)
 
     def enterExercise(self):
         self.click(self.exercise)
 
     def enterSubcapter(self, c, sc):
         time.sleep(5.0)
-        ret, curChapter, _ = self.matchList(self.chapters)
-        if not ret:
+        curTarget, curChapter = self.matchList(self.chapters)
+        if curTarget is None:
             print("获取海图章数失败。")
             return False
+        curChapter += 1
         if c < curChapter:
             for i in range(curChapter - c):
                 self.prevPageTarget.click()
@@ -110,6 +113,7 @@ class PrecombatScene(Scene):
             for i in range(c - curChapter):
                 self.nextPageTarget.click()
                 time.sleep(3.0)
+
         key = 100 * c + sc
         if key not in self.subcapters:
             print("{0}-{1}模板图片不存在。".format(c, sc))
@@ -124,7 +128,7 @@ class PrecombatScene(Scene):
 class ExerciseScene(Scene):
     def __init__(self, game):
         super().__init__(game)
-        self.back = Template.Template(game, "返回", "./Exercise/Back.png")
+        self.back1 = Template.Template(game, "返回", "./Exercise/Back.png")
         self.operation = Template.Template(game, "演习", "./Exercise/Operation.png")
         self.firstOne = Template.Target(game, gc.Point(50, 128), gc.Size(160, 228))
         self.startExercise = Template.Template(game, "开始演习", "./Exercise/StartExercise.png")
@@ -134,10 +138,12 @@ class ExerciseScene(Scene):
         self.confirm = Template.Template(game, "确认", "./Exercise/Confirm.png")
 
     def back(self):
-        self.click(self.back)
+        self.click(self.back1)
 
     def enterExercise(self):
-        # self.click(self.operation, self.firstOne)
+        target = self.match(self.operation)
+        if target is not None:
+            self.firstOne.click()
         self.click(self.startExercise)
         self.click(self.weighAnchor)
 
