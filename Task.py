@@ -19,11 +19,12 @@ class ExerciseTask(Task):
         mainScene = Scene.MainScene(self.game)
         precombatScene = Scene.PrecombatScene(self.game)
         exerciseScene = Scene.ExerciseScene(self.game)
+        battleScene = Scene.BattleScene(self.game)
         mainScene.enterPrecombat()
         precombatScene.enterExercise()
         for i in range(5):
             exerciseScene.enterExercise()
-            exerciseScene.leaveExercise()
+            battleScene.leaveBattle(False)
         exerciseScene.back()
         precombatScene.back()
 
@@ -35,11 +36,12 @@ class MaidTask(Task):
     def run(self):
         mainScene = Scene.MainScene(self.game)
         maidScene = Scene.MaidScene(self.game)
+        battleScene = Scene.BattleScene(self.game)
         if not mainScene.enterMaid():
             return
         while True:
             maidScene.enterExercise()
-            maidScene.leaveExercise()
+            battleScene.leaveBattle(False)
 
 
 class C01S01LoopTask(Task):
@@ -56,6 +58,7 @@ class C01S01LoopTask(Task):
             return
         while True:
             c01s01Scene.enterAmbush()
+            battleScene.enterBattle()
             battleScene.leaveBattle()
             c01s01Scene.leaveAmbush()
 
@@ -73,4 +76,5 @@ class C03S04Task(Task):
             precombatScene.enterSubcapter(3, 4)
             while c03s04Scene.bossExist:
                 c03s04Scene.enterBattle()
+                battleScene.enterBattle()
                 battleScene.leaveBattle()

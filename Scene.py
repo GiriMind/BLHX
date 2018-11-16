@@ -133,9 +133,6 @@ class ExerciseScene(Scene):
         self.firstOne = Template.Target(game, gc.Point(50, 128), gc.Size(160, 228))
         self.startExercise = Template.Template(game, "开始演习", "./Exercise/StartExercise.png")
         self.weighAnchor = Template.Template(game, "出击", "./Exercise/WeighAnchor.png")
-        self.ttc = Template.Template(game, "点击继续", "./Exercise/TTC.png")
-        self.ttc2 = Template.Template(game, "点击继续2", "./Exercise/TTC2.png")
-        self.confirm = Template.Template(game, "确认", "./Exercise/Confirm.png")
 
     def back(self):
         self.click(self.back1)
@@ -146,11 +143,6 @@ class ExerciseScene(Scene):
             self.firstOne.click()
         self.click(self.startExercise)
         self.click(self.weighAnchor)
-
-    def leaveExercise(self):
-        self.click(self.ttc)
-        self.click(self.ttc2)
-        self.click(self.confirm)
 
 
 class MaidScene(ExerciseScene):
@@ -255,13 +247,25 @@ class C03S04Scene(Scene):
 class BattleScene(Scene):
     def __init__(self, game):
         super().__init__(game)
+        self.auto = Template.Template(game, "自律战斗", "./Battle/Auto.png")
+        self.gotIt = Template.Template(game, "知道了", "./Battle/GotIt.png")
         self.ttc = Template.Template(game, "点击继续", "./Battle/TTC.png")
         self.ttc2 = Template.Template(game, "点击继续2", "./Battle/TTC2.png")
         self.performance = Template.Template(game, "性能", "./Battle/Performance.png")
+        self.ok = Template.Template(game, "确定", "./Battle/OK.png")
         self.confirm = Template.Template(game, "确认", "./Battle/Confirm.png")
+        self.autoFlag = False
 
-    def leaveBattle(self):
+    def enterBattle(self):
+        if not self.autoFlag:
+            if self.click(self.auto, 5.0):
+                self.click(self.gotIt, 5.0)
+            self.autoFlag = True
+
+    def leaveBattle(self, drops=True):
         self.click(self.ttc)
         self.click(self.ttc2)
-        self.click(self.performance, 5.0)
+        if drops:
+            if self.click(self.performance, 5.0):
+                self.click(self.ok)
         self.click(self.confirm)
