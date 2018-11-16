@@ -143,6 +143,14 @@ class ExerciseScene(Scene):
             self.firstOne.click()
         self.click(self.startExercise)
         self.click(self.weighAnchor)
+        # 演习次数不足
+        time.sleep(3.0)
+        target = self.match(self.weighAnchor, 3.0)
+        if target is not None:
+            self.back()
+            return False
+        else:
+            return True
 
 
 class MaidScene(ExerciseScene):

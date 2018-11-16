@@ -22,8 +22,9 @@ class ExerciseTask(Task):
         battleScene = Scene.BattleScene(self.game)
         mainScene.enterPrecombat()
         precombatScene.enterExercise()
-        for i in range(5):
-            exerciseScene.enterExercise()
+        while True:
+            if not exerciseScene.enterExercise():
+                break
             battleScene.leaveBattle(False)
         exerciseScene.back()
         precombatScene.back()
