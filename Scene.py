@@ -121,6 +121,7 @@ class PrecombatScene(Scene):
         subcapterTarget = self.subcapters[key]
         subcapterTarget.click()
         self.click(self.goNow)
+        time.sleep(1.0)
         self.click(self.goNow2)
         return True
 
@@ -144,7 +145,7 @@ class ExerciseScene(Scene):
         self.click(self.startExercise)
         self.click(self.weighAnchor)
         # 演习次数不足
-        time.sleep(3.0)
+        time.sleep(5.0)
         target = self.match(self.weighAnchor, 3.0)
         if target is not None:
             self.back()
@@ -267,7 +268,7 @@ class BattleScene(Scene):
     def enterBattle(self):
         if not self.autoFlag:
             if self.click(self.auto, 5.0):
-                self.click(self.gotIt, 5.0)
+                self.click(self.gotIt, 3.0)
             self.autoFlag = True
 
     def leaveBattle(self, drops=True):

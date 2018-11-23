@@ -60,7 +60,7 @@ class C01S01LoopTask(Task):
         while True:
             c01s01Scene.enterAmbush()
             battleScene.enterBattle()
-            battleScene.leaveBattle()
+            battleScene.leaveBattle(False)
             c01s01Scene.leaveAmbush()
 
 

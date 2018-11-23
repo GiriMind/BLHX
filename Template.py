@@ -8,10 +8,12 @@ class Template:
         self.game = game
         self.name = name
         self.image = gc.Image(imageFile)
+        if self.image.isEmpty():
+            raise Exception("载入图片失败：".format(imageFile))
 
     def matchOn(self, scene):
-        pos = gc.Point()
-        if scene.match(pos, self.image):
+        ret, pos = scene.match(self.image)
+        if ret:
             return Target(self.game, pos)
         else:
             return None
