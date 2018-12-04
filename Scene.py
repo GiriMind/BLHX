@@ -188,69 +188,27 @@ class C01S01Scene(Scene):
 class C03S04Scene(Scene):
     def __init__(self, game):
         super().__init__(game)
-        self.recFleetTempl = Template.Template("侦查舰队", "./Subchapter/RecFleet.png", "./Subchapter/RecFleetMask.png")
-        self.mainFleetTempl = Template.Template("主力舰队", "./Subchapter/MainFleet.png", "./Subchapter/MainFleetMask.png")
-        self.airFleetTempl = Template.Template("航空舰队", "./Subchapter/AirFleet.png", "./Subchapter/AirFleetMask.png")
-        self.weighAnchorTempl = Template.Template("出击", "./Subchapter/WeighAnchor.png")
+        self.enemies = []
+        self.enemies.append(Template.Template(game, "BOSS舰队", "./Subchapter/BossFleet.png"))
+        self.enemies.append(Template.Template(game, "侦查舰队", "./Subchapter/RecFleet.png"))
+        self.enemies.append(Template.Template(game, "航空舰队", "./Subchapter/AirFleet.png"))
+        self.enemies.append(Template.Template(game, "主力舰队", "./Subchapter/MainFleet.png"))
 
-        self.mapX = 74
-        self.mapY = 250 - (448 - 304)
-        self.tileSize = 110
-        self.columns = 8
-        self.rows = 4
-        self.pt = gc.PerspectiveTransform(gc.Size2f(890, 448), 304, 70, 81)
-        self.map = [[0 for i in range(self.columns)] for i in range(self.rows)]
+        self.weighAnchor1 = Template.Template(game, "出击", "./Subchapter/WeighAnchor.png")
 
-    def enterBattle(self):
-        while True:
-            image = self.game.capture()
+        self.bossExist = True
 
-            map = [[0 for i in range(self.columns)] for i in range(self.rows)]
-            recFleetTarget = self.recFleetTempl.matchOn(image)
-            for i in range(5):
-                if recFleetTarget.similarity > 0.95:
-                    size = recFleetTarget.getSize()
-                    x = recFleetTarget.location.x - self.mapX + size.width / 2
-                    y = recFleetTarget.location.y - self.mapY + size.height / 2
-                    transPos = self.pt.transform(gc.Point2f(x, y))
-                    col = int(transPos.x / self.tileSize)
-                    row = int(transPos.y / self.tileSize)
-                    if 0 <= col < self.columns and 0 <= row < self.rows:
-                        map[row][col] = 1
-                recFleetTarget = recFleetTarget.next()
-            mainFleetTarget = self.mainFleetTempl.matchOn(image)
-            for i in range(5):
-                if mainFleetTarget.similarity > 0.95:
-                    size = recFleetTarget.getSize()
-                    x = mainFleetTarget.location.x - self.mapX + size.width / 2
-                    y = mainFleetTarget.location.y - self.mapY + size.height / 2
-                    transPos = self.pt.transform(gc.Point2f(x, y))
-                    col = int(transPos.x / self.tileSize)
-                    row = int(transPos.y / self.tileSize)
-                    if 0 <= col < self.columns and 0 <= row < self.rows:
-                        map[row][col] = 2
-                mainFleetTarget = mainFleetTarget.next()
-            airFleetTarget = self.airFleetTempl.matchOn(image)
-            for i in range(5):
-                if airFleetTarget.similarity > 0.95:
-                    size = recFleetTarget.getSize()
-                    x = airFleetTarget.location.x - self.mapX + size.width / 2
-                    y = airFleetTarget.location.y - self.mapY + size.height / 2
-                    transPos = self.pt.transform(gc.Point2f(x, y))
-                    col = int(transPos.x / self.tileSize)
-                    row = int(transPos.y / self.tileSize)
-                    if 0 <= col < self.columns and 0 <= row < self.rows:
-                        map[row][col] = 3
-                airFleetTarget = airFleetTarget.next()
-            print("--------------------------------------------")
-            for row in range(4):
-                line = str()
-                for col in range(8):
-                    id = map[row][col]
-                    line += " %d " % id
-                print(line)
-            print("--------------------------------------------")
-            self.sleep()
+    def weighAnchor(self):
+        time.sleep(5.0)
+        target, i = self.matchList(self.enemies)
+        if target is None:
+            print("匹配敌人失败。")
+            return False
+        target.click()
+        self.click(self.weighAnchor1)
+        if i == 0:
+            self.bossExist = False
+        return True
 
 
 class BattleScene(Scene):
@@ -267,7 +225,7 @@ class BattleScene(Scene):
 
     def enterBattle(self):
         if not self.autoFlag:
-            if self.click(self.auto, 5.0):
+            if self.click(self.auto, 20.0):
                 self.click(self.gotIt, 3.0)
             self.autoFlag = True
 

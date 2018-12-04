@@ -56,6 +56,7 @@ class C01S01LoopTask(Task):
         battleScene = Scene.BattleScene(self.game)
         mainScene.enterPrecombat()
         if not precombatScene.enterSubcapter(1, 1):
+            precombatScene.back()
             return
         while True:
             c01s01Scene.enterAmbush()
@@ -73,9 +74,11 @@ class C03S04Task(Task):
         precombatScene = Scene.PrecombatScene(self.game)
         c03s04Scene = Scene.C03S04Scene(self.game)
         battleScene = Scene.BattleScene(self.game)
+        mainScene.enterPrecombat()
         while True:
             precombatScene.enterSubcapter(3, 4)
             while c03s04Scene.bossExist:
-                c03s04Scene.enterBattle()
+                c03s04Scene.weighAnchor()
                 battleScene.enterBattle()
                 battleScene.leaveBattle()
+        precombatScene.back()

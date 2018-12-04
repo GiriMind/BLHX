@@ -9,7 +9,7 @@ class Template:
         self.name = name
         self.image = gc.Image(imageFile)
         if self.image.isEmpty():
-            raise Exception("载入图片失败：".format(imageFile))
+            raise Exception("载入图片失败：{0}".format(imageFile))
 
     def matchOn(self, scene):
         ret, pos = scene.match(self.image)
