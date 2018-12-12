@@ -1,6 +1,5 @@
 # coding: utf-8
 
-import time
 import random
 
 import GraphCap as gc
@@ -26,30 +25,19 @@ class Game:
             self.mainWindow.restore()
         self.mainWindow.setSize(gc.Size(974, 634))
         self.capturer = gc.DesktopCapturer()
-        self.image = gc.Image()
-        # self.image24 = gc.Image()
+        self.buffer = gc.Image()
         self.rect = gc.Rect()
         self.input = gc.DesktopInput()
 
     def capture(self):
         while True:
             self.rect = self.mainWindow.getRect()
-            # print("窗口位置：x={0}, y={1}, width={2}, height={3}".format(
-            #    self.rect.x, self.rect.y, self.rect.width, self.rect.height))
-            if not self.capturer.capture(self.image, self.rect):
-                print("捕获图像失败，桌面超时未更新，或者窗口位置错误。")
-                time.sleep(0.1)
+            if not self.capturer.capture(self.buffer, self.rect):
+                # print("捕获图像失败，桌面超时未更新，或者窗口位置错误。")
                 continue
-            # if self.image.getType() == gcc.IT_8UC4:
-            #    self.image.cvtColor(self.image24, gcc.CCC_BGRA2BGR)
-            #    return self.image24
-            # elif self.image.getType() == gcc.IT_8UC3:
-            #    return self.image
-            # else:
-            #    raise Exception("不支持的图像格式：{0}。".format(self.image.getType()))
-            return self.image
+            return self.buffer.toNdarray()
 
-    def click(self, pos, size):
+    def click(self, pos, size=None):
         if size is None:
             x = self.rect.x + pos.x
             y = self.rect.y + pos.y

@@ -81,4 +81,3 @@ class C03S04Task(Task):
                 c03s04Scene.weighAnchor()
                 battleScene.enterBattle()
                 battleScene.leaveBattle()
-        precombatScene.back()

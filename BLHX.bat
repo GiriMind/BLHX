@@ -1,2 +1,2 @@
-%~dp0Python37\python.exe %~dp0BLHX.py
+C:\Python37\python.exe %~dp0BLHX.py
 @pause
