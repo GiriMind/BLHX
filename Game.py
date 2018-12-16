@@ -1,6 +1,8 @@
 # coding: utf-8
 
+import time
 import random
+import cv2
 
 import GraphCap as gc
 
@@ -39,11 +41,26 @@ class Game:
 
     def click(self, pos, size=None):
         if size is None:
-            x = self.rect.x + pos.x
-            y = self.rect.y + pos.y
+            x = self.rect.x + pos[0]
+            y = self.rect.y + pos[1]
         else:
-            x = self.rect.x + pos.x + random.randint(0, size.width - 1)
-            y = self.rect.y + pos.y + random.randint(0, size.height - 1)
+            x = self.rect.x + pos[0] + random.randint(0, size[0] - 1)
+            y = self.rect.y + pos[1] + random.randint(0, size[1] - 1)
         self.input.setMousePos(gc.Point(x, y))
         self.input.mouseLeftDown()
         self.input.mouseLeftUp()
+
+
+if __name__ == "__main__":
+    game = Game()
+    beginTime = time.time()
+    fps = 0
+    while True:
+        scene = game.capture()
+        cv2.imshow("Test", scene)
+        cv2.waitKey(1)
+        fps += 1
+        if time.time() - beginTime > 1.0:
+            beginTime += 1.0
+            print(fps)
+            fps = 0

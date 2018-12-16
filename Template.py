@@ -10,23 +10,32 @@ class Template:
         self.name = name
         self.image = cv2.imread(filename)
         if self.image is None:
-            raise Exception("载入图片失败：{0}".format(filename))
+            raise Exception("载入模板图片失败：{0}".format(filename))
 
     def matchOn(self, scene):
-        sift = cv2.xfeatures2d.SIFT_create()
-        # surf = cv2.xfeatures2d.SURF_create()
-        kp1, desc1 = sift.detectAndCompute(self.image, None)
-        kp2, desc2 = sift.detectAndCompute(scene, None)
-        matcher = cv2.BFMatcher(cv2.NORM_L2)
-        matches = matcher.knnMatch(desc1, desc2, 2)
+        # sift = cv2.xfeatures2d.SIFT_create()
+        surf = cv2.xfeatures2d.SURF_create(400)
+        kp1, desc1 = surf.detectAndCompute(self.image, None)
+        kp2, desc2 = surf.detectAndCompute(scene, None)
+
+        # bf = cv2.BFMatcher(cv2.NORM_L2)
+        # matches = bf.knnMatch(desc1, desc2, 2)
+        FLANN_INDEX_KDTREE = 0
+        indexParams = dict(algorithm=FLANN_INDEX_KDTREE, trees=5)
+        searchParams = dict(checks=50)
+        flann = cv2.FlannBasedMatcher(indexParams, searchParams)
+        matches = flann.knnMatch(desc1, desc2, 2)
+
         good = []
         for m, n in matches:
             if m.distance < 0.66 * n.distance:
                 good.append(m)
-        
-        ret, pos = scene.match(self.image)
-        if ret:
-            return Target(self.game, pos)
+
+        if len(good) > 0.5 * len(kp1):
+            # srcPts = np.float32([kp1[m.queryIdx].pt for m in good]).reshape(-1,2)
+            dstPts = np.float32([kp2[m.trainIdx].pt for m in good]).reshape(-1, 2)
+            x, y = np.mean(dstPts, axis=0)
+            return Target(self.game, (int(x), int(y)))
         else:
             return None
 
@@ -39,3 +48,9 @@ class Target:
 
     def click(self):
         self.game.click(self.pos, self.size)
+
+
+if __name__ == "__main__":
+    scene = cv2.imread("1.png")
+    templ = Template(None, None, "./Main/WeighAnchor.png")
+    templ.matchOn(scene)

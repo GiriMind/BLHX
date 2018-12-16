@@ -9,8 +9,7 @@ sys.path.append(os.path.dirname(__file__))
 import Game
 import Task
 
-
-def BLHX():
+if __name__ == "__main__":
     random.seed()
     game = Game.Game()
     while True:
@@ -35,7 +34,3 @@ def BLHX():
         task.run()
         print("任务结束。")
         print("----------------------------------------")
-
-
-if __name__ == "__main__":
-    BLHX()

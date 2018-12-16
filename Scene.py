@@ -4,8 +4,43 @@ import sys
 import time
 import random
 
-import GraphCap as gc
 import Template
+
+
+def match(game, template, timeout=sys.float_info.max):
+    beginTime = time.time()
+    while time.time() - beginTime < timeout:
+        scene = game.capture()
+        target = template.matchOn(scene)
+        if target is not None:
+            print("匹配[{0}]成功。".format(template.name))
+            return target
+        else:
+            print("匹配[{0}]失败。".format(template.name))
+    print("匹配[{0}]超时。".format(template.name))
+    return None
+
+
+def matchList(game, templates):
+    scene = game.capture()
+    for i in range(len(templates)):
+        template = templates[i]
+        target = template.matchOn(scene)
+        if target is not None:
+            print("匹配[{0}]成功。".format(template.name))
+            return target, i
+        else:
+            print("匹配[{0}]失败。".format(template.name))
+    return None, -1
+
+
+def click(game, template, timeout=sys.float_info.max):
+    target = match(game, template, timeout)
+    if target is not None:
+        target.click()
+        return True
+    else:
+        return False
 
 
 class Scene:
@@ -14,39 +49,6 @@ class Scene:
 
     def sleep(self, min=1.0, max=2.0):
         time.sleep(random.uniform(min, max))
-
-    def match(self, template, timeout=sys.float_info.max):
-        beginTime = time.time()
-        while time.time() - beginTime < timeout:
-            scene = self.game.capture()
-            target = template.matchOn(scene)
-            if target is not None:
-                print("匹配[{0}]成功。".format(template.name))
-                return target
-            else:
-                print("匹配[{0}]失败。".format(template.name))
-        print("匹配[{0}]超时。".format(template.name))
-        return None
-
-    def click(self, template, timeout=sys.float_info.max):
-        target = self.match(template, timeout)
-        if target is not None:
-            target.click()
-            return True
-        else:
-            return False
-
-    def matchList(self, templates):
-        scene = self.game.capture()
-        for i in range(len(templates)):
-            template = templates[i]
-            target = template.matchOn(scene)
-            if target is not None:
-                print("匹配[{0}]成功。".format(template.name))
-                return target, i
-            else:
-                print("匹配[{0}]失败。".format(template.name))
-        return None, -1
 
 
 class MainScene(Scene):
@@ -57,10 +59,10 @@ class MainScene(Scene):
         self.maid = Template.Template(game, "演习作战", "./Events/Maid.png")
 
     def enterPrecombat(self):
-        self.click(self.weighAnchor)
+        click(self.game, self.weighAnchor)
 
     def enterMaid(self):
-        return self.click(self.maid, 5.0)
+        return click(self.game, self.maid, 5.0)
 
 
 class PrecombatScene(Scene):
@@ -86,21 +88,21 @@ class PrecombatScene(Scene):
         self.chapters.append(Template.Template(game, "第12章", "./Precombat/Chapter12.png"))
 
         self.subcapters = {}
-        self.subcapters[100 * 1 + 1] = Template.Target(game, gc.Point(160, 376), gc.Size(114, 24))
-        self.subcapters[100 * 3 + 4] = Template.Target(game, gc.Point(507, 306), gc.Size(137, 25))
+        self.subcapters[100 * 1 + 1] = Template.Target(game, (160, 376), (114, 24))
+        self.subcapters[100 * 3 + 4] = Template.Target(game, (507, 306), (137, 25))
 
-        self.prevPageTarget = Template.Target(game, gc.Point(40, 300), gc.Size(25, 35))
-        self.nextPageTarget = Template.Target(game, gc.Point(910, 300), gc.Size(25, 35))
+        self.prevPageTarget = Template.Target(game, (40, 300), (25, 35))
+        self.nextPageTarget = Template.Target(game, (910, 300), (25, 35))
 
     def back(self):
-        self.click(self.back1)
+        click(self.game, self.back1)
 
     def enterExercise(self):
-        self.click(self.exercise)
+        click(self.game, self.exercise)
 
     def enterSubcapter(self, c, sc):
         time.sleep(5.0)
-        curTarget, curChapter = self.matchList(self.chapters)
+        curTarget, curChapter = matchList(self.game, self.chapters)
         if curTarget is None:
             print("获取海图章数失败。")
             return False
@@ -120,9 +122,9 @@ class PrecombatScene(Scene):
             return False
         subcapterTarget = self.subcapters[key]
         subcapterTarget.click()
-        self.click(self.goNow)
+        click(self.game, self.goNow)
         time.sleep(1.0)
-        self.click(self.goNow2)
+        click(self.game, self.goNow2)
         return True
 
 
@@ -131,22 +133,22 @@ class ExerciseScene(Scene):
         super().__init__(game)
         self.back1 = Template.Template(game, "返回", "./Exercise/Back.png")
         self.operation = Template.Template(game, "演习", "./Exercise/Operation.png")
-        self.firstOne = Template.Target(game, gc.Point(50, 128), gc.Size(160, 228))
+        self.firstOne = Template.Target(game, (50, 128), (160, 228))
         self.startExercise = Template.Template(game, "开始演习", "./Exercise/StartExercise.png")
         self.weighAnchor = Template.Template(game, "出击", "./Exercise/WeighAnchor.png")
 
     def back(self):
-        self.click(self.back1)
+        click(self.game, self.back1)
 
     def enterExercise(self):
-        target = self.match(self.operation)
+        target = match(self.game, self.operation)
         if target is not None:
             self.firstOne.click()
-        self.click(self.startExercise)
-        self.click(self.weighAnchor)
+        click(self.game, self.startExercise)
+        click(self.game, self.weighAnchor)
         # 演习次数不足
         time.sleep(5.0)
-        target = self.match(self.weighAnchor, 3.0)
+        target = match(self.game, self.weighAnchor, 3.0)
         if target is not None:
             self.back()
             return False
@@ -160,15 +162,15 @@ class MaidScene(ExerciseScene):
         self.advanced = Template.Template(game, "高级演习", "./Events/Advanced.png")
 
     def enterExercise(self):
-        self.click(self.advanced)
-        self.click(self.weighAnchor)
+        click(self.game, self.advanced)
+        click(self.game, self.weighAnchor)
 
 
 class C01S01Scene(Scene):
     def __init__(self, game):
         super().__init__(game)
-        self.enterAmbushTarget = Template.Target(game, gc.Point(330, 252), gc.Size(87, 64))
-        self.leaveAmbushTarget = Template.Target(game, gc.Point(238, 252), gc.Size(83, 64))
+        self.enterAmbushTarget = Template.Target(game, (330, 252), (87, 64))
+        self.leaveAmbushTarget = Template.Target(game, (238, 252), (83, 64))
         self.meet = Template.Template(game, "迎击", "./Subchapter/Meet.png")
         self.weighAnchor = Template.Template(game, "出击", "./Subchapter/WeighAnchor.png")
 
@@ -176,8 +178,8 @@ class C01S01Scene(Scene):
         time.sleep(5.0)
         self.enterAmbushTarget.click()
         time.sleep(5.0)
-        self.click(self.meet)
-        self.click(self.weighAnchor)
+        click(self.game, self.meet)
+        click(self.game, self.weighAnchor)
 
     def leaveAmbush(self):
         time.sleep(5.0)
@@ -200,12 +202,12 @@ class C03S04Scene(Scene):
 
     def weighAnchor(self):
         time.sleep(5.0)
-        target, i = self.matchList(self.enemies)
+        target, i = matchList(self.game, self.enemies)
         if target is None:
             print("匹配敌人失败。")
             return False
         target.click()
-        self.click(self.weighAnchor1)
+        click(self.game, self.weighAnchor1)
         if i == 0:
             self.bossExist = False
         return True
@@ -225,14 +227,14 @@ class BattleScene(Scene):
 
     def enterBattle(self):
         if not self.autoFlag:
-            if self.click(self.auto, 20.0):
-                self.click(self.gotIt, 3.0)
+            if click(self.game, self.auto, 20.0):
+                click(self.game, self.gotIt, 3.0)
             self.autoFlag = True
 
     def leaveBattle(self, drops=True):
-        self.click(self.ttc)
-        self.click(self.ttc2)
+        click(self.game, self.ttc)
+        click(self.game, self.ttc2)
         if drops:
-            if self.click(self.performance, 5.0):
-                self.click(self.ok)
-        self.click(self.confirm)
+            if click(self.game, self.performance, 5.0):
+                click(self.game, self.ok)
+        click(self.game, self.confirm)
