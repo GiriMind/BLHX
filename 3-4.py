@@ -1,14 +1,18 @@
 # coding: utf-8
 
+import sys
+import os
 import time
 import random
 import cv2
 import numpy as np
 
+sys.path.append(os.path.dirname(__file__))
+
 import Game
 
 sift = cv2.xfeatures2d.SIFT_create()
-surf = cv2.xfeatures2d.SURF_create(400)
+# surf = cv2.xfeatures2d.SURF_create(400)
 
 FLANN_INDEX_KDTREE = 0
 indexParams = dict(algorithm=FLANN_INDEX_KDTREE, trees=5)
@@ -25,9 +29,6 @@ class Template:
         self.kp, self.desc = sift.detectAndCompute(self.image, None)
         if len(self.kp) == 0 or self.desc is None:
             raise Exception("无法检测到特征点：{0}".format(filename))
-        # cv2.drawKeypoints(self.image, self.kp, self.image)
-        # cv2.imshow("Template", self.image)
-        # cv2.waitKey()
         self.ratio = ratio
 
 
@@ -53,40 +54,21 @@ if __name__ == "__main__":
     game = Game.Game()
     while True:
         scene = game.capture()
-        # cv2.imshow("scene", scene)
-        # cv2.waitKey(1)
         kp, desc = sift.detectAndCompute(scene, None)
-        # print(kp)
-        # print(desc)
         # 全黑图
         if len(kp) == 0 or desc is None:
             continue
-
-        for i in range(len(templates)):
-            try:
-                template = templates[i]
-                # cv2.imshow("Template", template.image)
-                # cv2.waitKey(1)
-
-                matches = flann.knnMatch(template.desc, desc, 2)
-
-                good = []
-                for m, n in matches:
-                    if m.distance < 0.66 * n.distance:
-                        good.append(m)
-                # print("-----------------------------------")
-                # print(len(template.kp))
-                # print(len(good))
-                # time.sleep(1.0)
-                if len(good) < len(template.kp) / template.ratio:
-                    continue
-
-                dstPts = np.float32([kp[m.trainIdx].pt for m in good]).reshape(-1, 2)
-                x, y = np.mean(dstPts, axis=0)
-
-                game.click((int(x), int(y)))
-                break
-
-            except Exception as e:
-                # print(i)
-                raise
+        for template in templates:
+            matches = flann.knnMatch(template.desc, desc, 2)
+            good = []
+            for m, n in matches:
+                if m.distance < 0.66 * n.distance:
+                    good.append(m)
+            if len(good) < len(template.kp) / template.ratio:
+                continue
+            dstPts = np.float32([kp[m.trainIdx].pt for m in good]).reshape(-1, 2)
+            # x, y = np.mean(dstPts, axis=0)
+            x, y = dstPts[random.randint(0, len(dstPts) - 1)]
+            game.click((int(x), int(y)))
+            time.sleep(1.0)
+            break
