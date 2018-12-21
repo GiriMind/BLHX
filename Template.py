@@ -30,14 +30,13 @@ class Template:
         for m, n in matches:
             if m.distance < 0.66 * n.distance:
                 good.append(m)
-
-        if len(good) > 0.5 * len(kp1):
-            # srcPts = np.float32([kp1[m.queryIdx].pt for m in good]).reshape(-1,2)
-            dstPts = np.float32([kp2[m.trainIdx].pt for m in good]).reshape(-1, 2)
-            x, y = np.mean(dstPts, axis=0)
-            return Target(self.game, (int(x), int(y)))
-        else:
+        if len(good) < len(kp1) / 2:
             return None
+
+        # srcPts = np.float32([kp1[m.queryIdx].pt for m in good]).reshape(-1,2)
+        dstPts = np.float32([kp2[m.trainIdx].pt for m in good]).reshape(-1, 2)
+        x, y = np.mean(dstPts, axis=0)
+        return Target(self.game, (int(x), int(y)))
 
 
 class Target:

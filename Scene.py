@@ -222,6 +222,7 @@ class BattleScene(Scene):
         self.ttc2 = Template.Template(game, "点击继续2", "./Battle/TTC2.png")
         self.performance = Template.Template(game, "性能", "./Battle/Performance.png")
         self.ok = Template.Template(game, "确定", "./Battle/OK.png")
+        self.victory = Template.Template(game, "大获全胜", "./Battle/Victory.png")
         self.confirm = Template.Template(game, "确认", "./Battle/Confirm.png")
         self.autoFlag = False
 
