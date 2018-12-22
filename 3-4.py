@@ -42,6 +42,7 @@ if __name__ == "__main__":
     templates.append(Template("侦查舰队", "./Subchapter/RecFleet.png", 5))
     templates.append(Template("航空舰队", "./Subchapter/AirFleet.png", 5))
     templates.append(Template("主力舰队", "./Subchapter/MainFleet.png", 5))
+    templates.append(Template("运输舰队", "./Subchapter/TranFleet.png", 5))
     templates.append(Template("出击", "./Subchapter/WeighAnchor.png"))
     templates.append(Template("点击继续", "./Battle/TTC.png"))
     templates.append(Template("点击继续2", "./Battle/TTC2.png"))
@@ -59,6 +60,8 @@ if __name__ == "__main__":
         if len(kp) == 0 or desc is None:
             continue
         for template in templates:
+            # 降低CPU使用率
+            time.sleep(0.01)
             matches = flann.knnMatch(template.desc, desc, 2)
             good = []
             for m, n in matches:
