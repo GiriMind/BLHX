@@ -1,33 +1,21 @@
 # BLHX
 
-基于图像识别的碧蓝航线挂机脚本。
+基于图像识别的BLHX挂机脚本。
 
-## 系统要求
+## 环境
 
 Win8 64位或者以上，安装[VC++2017可再发行程序包](https://support.microsoft.com/zh-cn/help/2977003/the-latest-supported-visual-c-downloads)。
 
-## 模拟器
+任意模拟器，任意窗口大小。
 
-暂时限定原版的BlueStacks，因为部分坐标写死了。
-
-需要挂代理去[bluestacks.com](https://www.bluestacks.com/)下载原版的BlueStacks，使用[BSTweaker](https://forum.xda-developers.com/general/general/bluestacks-tweaker-2-tool-modifing-t3622681)关闭Google账号登录要求。
-
-脚本会自动设置模拟器窗口分辨率为`974*634`，即游戏分辨率为`960*540`，以获得最佳的图像识别效果。
+或许可以配合[scrcpy](https://github.com/Genymobile/scrcpy)在Android上挂机（未测试）。
 
 ## 使用
 
-下载[发布包](https://github.com/GiriMind/BLHX/releases/download/0.0.4/BLHX.7z)，下载最新的[脚本代码](https://github.com/GiriMind/BLHX/archive/master.zip)覆盖之。
+下载[发布包](https://github.com/GiriMind/BLHX/releases/download/0.0.5/BLHX.7z)，下载最新的[脚本代码](https://github.com/GiriMind/BLHX/archive/master.zip)覆盖之。
 
-登录游戏到主界面。
+进入游戏到第3章界面。
 
-运行`BLHX.bat`，选择任务。
+运行`3-4.bat`，选择游戏窗口。
 
-保持模拟器窗口在最前，不要被遮挡。
-
-## 已实现功能
-
-1. 连续演习。
-
-2. 1-1伏击刷好感度
-
-3. 3-4捞吃喝
+保持游戏窗口在最前，不要被遮挡。
