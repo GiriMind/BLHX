@@ -77,7 +77,7 @@ if __name__ == "__main__":
             if len(good) < len(template.kp) / template.ratio:
                 continue
             dstPts = np.float32([kp[m.trainIdx].pt for m in good]).reshape(-1, 2)
-            # boss
+            # BOSS
             if i == 4:
                 minX, minY, maxX, maxY = 10000, 10000, 0, 0
                 for pt in dstPts:
@@ -91,7 +91,7 @@ if __name__ == "__main__":
                         maxY = pt[1]
                 width = maxX - minX
                 height = maxY - minY
-                maxX = minX
+                maxX = maxX - width
                 maxY = maxY + height / 2.0
                 minX = minX - width * 1.5
                 minY = minY - height / 2.0
@@ -122,6 +122,7 @@ if __name__ == "__main__":
                     game.click((int(x), int(y)))
                     time.sleep(1.0)
                     clicked = True
+                    print("BOSS被堵塞")
                     break
                 print("BOSS未堵塞")
                 if not clicked:
