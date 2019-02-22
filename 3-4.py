@@ -51,6 +51,12 @@ if __name__ == "__main__":
     templates.append(Template("确认", "./Battle/Confirm.png"))
     templates.append(Template("大获全胜", "./Battle/Victory.png"))
 
+    enemies = []
+    enemies.append(Template("侦查舰队", "./Subchapter/RecFleet.png", 5))
+    enemies.append(Template("航空舰队", "./Subchapter/AirFleet.png", 5))
+    enemies.append(Template("主力舰队", "./Subchapter/MainFleet.png", 5))
+    enemies.append(Template("运输舰队", "./Subchapter/TranFleet.png", 5))
+
     random.seed()
     game = Game.Game()
     while True:
@@ -59,7 +65,8 @@ if __name__ == "__main__":
         # 全黑图
         if len(kp) == 0 or desc is None:
             continue
-        for template in templates:
+        for i in range(len(templates)):
+            template = templates[i]
             # 降低CPU使用率
             time.sleep(0.01)
             matches = flann.knnMatch(template.desc, desc, 2)
@@ -70,8 +77,62 @@ if __name__ == "__main__":
             if len(good) < len(template.kp) / template.ratio:
                 continue
             dstPts = np.float32([kp[m.trainIdx].pt for m in good]).reshape(-1, 2)
-            # x, y = np.mean(dstPts, axis=0)
-            x, y = dstPts[random.randint(0, len(dstPts) - 1)]
-            game.click((int(x), int(y)))
-            time.sleep(1.0)
-            break
+            # boss
+            if i == 4:
+                minX, minY, maxX, maxY = 10000, 10000, 0, 0
+                for pt in dstPts:
+                    if pt[0] < minX:
+                        minX = pt[0]
+                    if pt[1] < minY:
+                        minY = pt[1]
+                    if pt[0] > maxX:
+                        maxX = pt[0]
+                    if pt[1] > maxY:
+                        maxY = pt[1]
+                width = maxX - minX
+                height = maxY - minY
+                maxX = minX
+                maxY = maxY + height / 2.0
+                minX = minX - width * 1.5
+                minY = minY - height / 2.0
+                target = scene[int(minY):int(maxY), int(minX):int(maxX)]
+                # cv2.rectangle(scene, (int(minX), int(minY)), (int(maxX), int(maxY)), (0, 0, 255), 1)
+                # cv2.imshow("scene", scene)
+                # cv2.imshow("target", target)
+                # cv2.waitKey()
+                kp, desc = sift.detectAndCompute(target, None)
+                # 全黑图
+                if len(kp) == 0 or desc is None:
+                    continue
+                clicked = False
+                for i in range(len(enemies)):
+                    enemy = enemies[i]
+                    # 降低CPU使用率
+                    time.sleep(0.01)
+                    matches = flann.knnMatch(enemy.desc, desc, 2)
+                    good = []
+                    for m, n in matches:
+                        if m.distance < 0.66 * n.distance:
+                            good.append(m)
+                    if len(good) < len(enemy.kp) / enemy.ratio:
+                        continue
+                    dstPts2 = np.float32([kp[m.trainIdx].pt for m in good]).reshape(-1, 2)
+                    # x, y = np.mean(dstPts2, axis=0)
+                    x, y = dstPts2[random.randint(0, len(dstPts2) - 1)]
+                    game.click((int(x), int(y)))
+                    time.sleep(1.0)
+                    clicked = True
+                    break
+                print("BOSS未堵塞")
+                if not clicked:
+                    # x, y = np.mean(dstPts, axis=0)
+                    x, y = dstPts[random.randint(0, len(dstPts) - 1)]
+                    game.click((int(x), int(y)))
+                    time.sleep(1.0)
+                    break
+            else:
+                # x, y = np.mean(dstPts, axis=0)
+                x, y = dstPts[random.randint(0, len(dstPts) - 1)]
+                game.click((int(x), int(y)))
+                time.sleep(1.0)
+                break

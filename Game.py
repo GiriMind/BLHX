@@ -1,10 +1,14 @@
 # coding: utf-8
 
+import sys
+import os
 import time
 import random
 import cv2
 
-import GraphCap as gc
+sys.path.append(os.path.dirname(__file__))
+
+import pyGraphCap as gc
 
 
 class Game:
@@ -38,7 +42,7 @@ class Game:
         while True:
             self.rect = self.window.getRect()
             if not self.capturer.capture(self.buffer, self.rect):
-                # print("捕获图像失败，桌面超时未更新，或者窗口位置错误。")
+                print("抓图失败：桌面没有变化导致超时，或者窗口位置超出桌面范围。")
                 continue
             return self.buffer.toNdarray()
 
