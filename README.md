@@ -10,7 +10,7 @@ Win8 64位或者以上，安装[VC++2017可再发行程序包](https://support.m
 
 Python37便携版打包失败，需自行折腾。
 
-安装Python37，安装OpenCV`pip install opencv-python opencv-contrib-python`。
+安装Python37 64位，安装OpenCV`pip install opencv-python opencv-contrib-python`。
 
 自行编译或者下载[xfeatures2d](https://github.com/GiriMind/BLHX/releases/download/0.0.6/xfeatures2d.7z)，覆盖至`Python37/Lib/site-packages/cv2/`。
 
