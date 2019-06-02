@@ -21,7 +21,7 @@ flann = cv2.FlannBasedMatcher(indexParams, searchParams)
 
 
 class Template:
-    def __init__(self, name, filename, ratio=2):
+    def __init__(self, name, filename, ratio=0.5):
         self.name = name
         self.image = cv2.imread(filename)
         if self.image is None:
@@ -38,24 +38,24 @@ if __name__ == "__main__":
     templates.append(Template("立刻前往", "./Precombat/GoNow.png"))
     templates.append(Template("立刻前往2", "./Precombat/GoNow2.png"))
     templates.append(Template("规避", "./Subchapter/Evade.png"))
-    templates.append(Template("BOSS舰队", "./Subchapter/BossFleet.png", 5))
-    templates.append(Template("侦查舰队", "./Subchapter/RecFleet.png", 5))
-    templates.append(Template("航空舰队", "./Subchapter/AirFleet.png", 5))
-    templates.append(Template("主力舰队", "./Subchapter/MainFleet.png", 5))
-    templates.append(Template("运输舰队", "./Subchapter/TranFleet.png", 5))
+    templates.append(Template("BOSS舰队", "./Subchapter/BossFleet.png", 0.2))
+    templates.append(Template("侦查舰队", "./Subchapter/RecFleet.png", 0.2))
+    templates.append(Template("航空舰队", "./Subchapter/AirFleet.png", 0.2))
+    templates.append(Template("主力舰队", "./Subchapter/MainFleet.png", 0.2))
+    templates.append(Template("运输舰队", "./Subchapter/TranFleet.png", 0.2))  # old
     templates.append(Template("出击", "./Subchapter/WeighAnchor.png"))
     templates.append(Template("点击继续", "./Battle/TTC.png"))
     templates.append(Template("点击继续2", "./Battle/TTC2.png"))
     templates.append(Template("性能", "./Battle/Performance.png"))
-    templates.append(Template("确定", "./Battle/OK.png"))
-    templates.append(Template("确认", "./Battle/Confirm.png"))
+    templates.append(Template("确定2", "./Battle/OK2.png"))
     templates.append(Template("大获全胜", "./Battle/Victory.png"))
+    templates.append(Template("确定", "./Battle/OK.png"))
 
     enemies = []
-    enemies.append(Template("侦查舰队", "./Subchapter/RecFleet.png", 5))
-    enemies.append(Template("航空舰队", "./Subchapter/AirFleet.png", 5))
-    enemies.append(Template("主力舰队", "./Subchapter/MainFleet.png", 5))
-    enemies.append(Template("运输舰队", "./Subchapter/TranFleet.png", 5))
+    enemies.append(Template("侦查舰队", "./Subchapter/RecFleet.png", 0.2))
+    enemies.append(Template("航空舰队", "./Subchapter/AirFleet.png", 0.2))
+    enemies.append(Template("主力舰队", "./Subchapter/MainFleet.png", 0.2))
+    enemies.append(Template("运输舰队", "./Subchapter/TranFleet.png", 0.2))
 
     random.seed()
     game = Game.Game()
@@ -72,9 +72,9 @@ if __name__ == "__main__":
             matches = flann.knnMatch(template.desc, desc, 2)
             good = []
             for m, n in matches:
-                if m.distance < 0.66 * n.distance:
+                if m.distance < n.distance * 0.66:
                     good.append(m)
-            if len(good) < len(template.kp) / template.ratio:
+            if len(good) < len(template.kp) * template.ratio:
                 continue
             dstPts = np.float32([kp[m.trainIdx].pt for m in good]).reshape(-1, 2)
             # BOSS
@@ -112,9 +112,9 @@ if __name__ == "__main__":
                     matches = flann.knnMatch(enemy.desc, desc, 2)
                     good = []
                     for m, n in matches:
-                        if m.distance < 0.66 * n.distance:
+                        if m.distance < n.distance * 0.66:
                             good.append(m)
-                    if len(good) < len(enemy.kp) / enemy.ratio:
+                    if len(good) < len(enemy.kp) * enemy.ratio:
                         continue
                     dstPts2 = np.float32([kp[m.trainIdx].pt for m in good]).reshape(-1, 2)
                     # x, y = np.mean(dstPts2, axis=0)

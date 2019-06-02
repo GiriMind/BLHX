@@ -54,8 +54,8 @@ class Game:
             self.pos.x = self.rect.x + pos[0] + random.randint(0, size[0] - 1)
             self.pos.y = self.rect.y + pos[1] + random.randint(0, size[1] - 1)
         self.input.setMousePos(self.pos)
-        self.input.mouseLeftDown()
-        self.input.mouseLeftUp()
+        self.input.mouseLeftPress()
+        self.input.mouseLeftRelease()
 
 
 if __name__ == "__main__":
