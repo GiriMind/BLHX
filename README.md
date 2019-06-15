@@ -17,3 +17,7 @@ Win8 64位或者以上，安装[VC++2017可再发行程序包](https://support.m
 运行`3-4.bat`，选择游戏窗口。
 
 保持游戏窗口在最前，不要被遮挡。
+
+## 依赖
+
+[pyGraphCap](https://github.com/GiriMind/pyGraphCap)
