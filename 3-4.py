@@ -21,7 +21,7 @@ flann = cv2.FlannBasedMatcher(indexParams, searchParams)
 
 
 class Template:
-    def __init__(self, name, filename, ratio=0.5):
+    def __init__(self, name, filename, ratio=0.5, sleep=1.0):
         self.name = name
         self.image = cv2.imread(filename)
         if self.image is None:
@@ -30,6 +30,7 @@ class Template:
         if len(self.kp) == 0 or self.desc is None:
             raise Exception("无法检测到特征点：{0}".format(filename))
         self.ratio = ratio
+        self.sleep = sleep
 
 
 if __name__ == "__main__":
@@ -38,24 +39,25 @@ if __name__ == "__main__":
     templates.append(Template("立刻前往", "./Precombat/GoNow.png"))
     templates.append(Template("立刻前往2", "./Precombat/GoNow2.png"))
     templates.append(Template("规避", "./Subchapter/Evade.png"))
-    templates.append(Template("BOSS舰队", "./Subchapter/BossFleet.png", 0.2))
-    templates.append(Template("侦查舰队", "./Subchapter/RecFleet.png", 0.2))
-    templates.append(Template("航空舰队", "./Subchapter/AirFleet.png", 0.2))
-    templates.append(Template("主力舰队", "./Subchapter/MainFleet.png", 0.2))
-    templates.append(Template("运输舰队", "./Subchapter/TranFleet.png", 0.2))  # old
+    templates.append(Template("BOSS舰队", "./Subchapter/BossFleet.png", 0.2, 3.0))
+    templates.append(Template("侦查舰队", "./Subchapter/RecFleet.png", 0.2, 3.0))
+    templates.append(Template("航空舰队", "./Subchapter/AirFleet.png", 0.2, 3.0))
+    templates.append(Template("主力舰队", "./Subchapter/MainFleet.png", 0.2, 3.0))
+    templates.append(Template("运输舰队", "./Subchapter/TranFleet.png", 0.2, 3.0))  # old
     templates.append(Template("出击", "./Subchapter/WeighAnchor.png"))
     templates.append(Template("点击继续", "./Battle/TTC.png"))
     templates.append(Template("点击继续2", "./Battle/TTC2.png"))
+    templates.append(Template("点击继续3", "./Battle/TTC3.png"))
     templates.append(Template("性能", "./Battle/Performance.png"))
     templates.append(Template("确定2", "./Battle/OK2.png"))
     templates.append(Template("大获全胜", "./Battle/Victory.png"))
     templates.append(Template("确定", "./Battle/OK.png"))
 
     enemies = []
-    enemies.append(Template("侦查舰队", "./Subchapter/RecFleet.png", 0.2))
-    enemies.append(Template("航空舰队", "./Subchapter/AirFleet.png", 0.2))
-    enemies.append(Template("主力舰队", "./Subchapter/MainFleet.png", 0.2))
-    enemies.append(Template("运输舰队", "./Subchapter/TranFleet.png", 0.2))
+    enemies.append(Template("侦查舰队", "./Subchapter/RecFleet.png", 0.2, 3.0))
+    enemies.append(Template("航空舰队", "./Subchapter/AirFleet.png", 0.2, 3.0))
+    enemies.append(Template("主力舰队", "./Subchapter/MainFleet.png", 0.2, 3.0))
+    enemies.append(Template("运输舰队", "./Subchapter/TranFleet.png", 0.2, 3.0))
 
     random.seed()
     game = Game.Game()
@@ -79,8 +81,12 @@ if __name__ == "__main__":
             dstPts = np.float32([kp[m.trainIdx].pt for m in good]).reshape(-1, 2)
             # BOSS
             if i == 4:
-                minX, minY, maxX, maxY = 10000, 10000, 0, 0
+                # 截取boss左侧子图
+                minX, minY, maxX, maxY = 10000.0, 10000.0, 0.0, 0.0
                 for pt in dstPts:
+                    # cv2.circle(scene, (int(pt[0]), int(pt[1])), 2, (0, 0, 255))
+                    if pt[0] < 0.0 or pt[1] < 0.0:
+                        continue
                     if pt[0] < minX:
                         minX = pt[0]
                     if pt[1] < minY:
@@ -89,51 +95,57 @@ if __name__ == "__main__":
                         maxX = pt[0]
                     if pt[1] > maxY:
                         maxY = pt[1]
+                # cv2.imshow("scene", scene)
+                # cv2.waitKey()
                 width = maxX - minX
                 height = maxY - minY
                 maxX = maxX - width
-                maxY = maxY + height / 2.0
-                minX = minX - width * 1.5
-                minY = minY - height / 2.0
+                maxY = maxY + height * 3.0
+                minX = minX - width * 3.0
+                minY = minY - height * 3.0
+                # print("{0} {1} {2} {3}".format(minX, minY, width, height))
                 target = scene[int(minY):int(maxY), int(minX):int(maxX)]
+                if target is None:
+                    continue
                 # cv2.rectangle(scene, (int(minX), int(minY)), (int(maxX), int(maxY)), (0, 0, 255), 1)
                 # cv2.imshow("scene", scene)
                 # cv2.imshow("target", target)
                 # cv2.waitKey()
-                kp, desc = sift.detectAndCompute(target, None)
+                kp2, desc2 = sift.detectAndCompute(target, None)
                 # 全黑图
-                if len(kp) == 0 or desc is None:
+                if len(kp2) == 0 or desc2 is None:
                     continue
                 clicked = False
                 for i in range(len(enemies)):
                     enemy = enemies[i]
                     # 降低CPU使用率
                     time.sleep(0.01)
-                    matches = flann.knnMatch(enemy.desc, desc, 2)
+                    matches = flann.knnMatch(enemy.desc, desc2, 2)
                     good = []
                     for m, n in matches:
                         if m.distance < n.distance * 0.66:
                             good.append(m)
                     if len(good) < len(enemy.kp) * enemy.ratio:
                         continue
-                    dstPts2 = np.float32([kp[m.trainIdx].pt for m in good]).reshape(-1, 2)
+                    dstPts2 = np.float32([kp2[m.trainIdx].pt for m in good]).reshape(-1, 2)
                     # x, y = np.mean(dstPts2, axis=0)
-                    x, y = dstPts2[random.randint(0, len(dstPts2) - 1)]
-                    game.click((int(x), int(y)))
-                    time.sleep(1.0)
+                    x2, y2 = dstPts2[random.randint(0, len(dstPts2) - 1)]
+                    game.click((int(minX + x2), int(minY + y2)))
+                    time.sleep(enemy.sleep)
                     clicked = True
                     print("BOSS被堵塞")
                     break
-                print("BOSS未堵塞")
+                # 没点击小弟
                 if not clicked:
+                    print("BOSS未堵塞")
                     # x, y = np.mean(dstPts, axis=0)
                     x, y = dstPts[random.randint(0, len(dstPts) - 1)]
                     game.click((int(x), int(y)))
-                    time.sleep(1.0)
+                    time.sleep(template.sleep)
                     break
             else:
                 # x, y = np.mean(dstPts, axis=0)
                 x, y = dstPts[random.randint(0, len(dstPts) - 1)]
                 game.click((int(x), int(y)))
-                time.sleep(1.0)
+                time.sleep(template.sleep)
                 break
