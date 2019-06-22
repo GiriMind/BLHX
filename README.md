@@ -1,6 +1,6 @@
 # BLHX
 
-基于图像识别的BLHX挂机脚本。
+基于OpenCV SIFT/SURF图像识别的BLHX挂机脚本。
 
 ## 环境
 

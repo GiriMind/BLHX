@@ -21,7 +21,7 @@ flann = cv2.FlannBasedMatcher(indexParams, searchParams)
 
 
 class Template:
-    def __init__(self, name, filename, ratio=0.5, sleep=1.0):
+    def __init__(self, name, filename, ratio=0.5):
         self.name = name
         self.image = cv2.imread(filename)
         if self.image is None:
@@ -30,7 +30,6 @@ class Template:
         if len(self.kp) == 0 or self.desc is None:
             raise Exception("无法检测到特征点：{0}".format(filename))
         self.ratio = ratio
-        self.sleep = sleep
 
 
 if __name__ == "__main__":
@@ -39,11 +38,11 @@ if __name__ == "__main__":
     templates.append(Template("立刻前往", "./Precombat/GoNow.png"))
     templates.append(Template("立刻前往2", "./Precombat/GoNow2.png"))
     templates.append(Template("规避", "./Subchapter/Evade.png"))
-    templates.append(Template("BOSS舰队", "./Subchapter/BossFleet.png", 0.2, 3.0))
-    templates.append(Template("侦查舰队", "./Subchapter/RecFleet.png", 0.2, 3.0))
-    templates.append(Template("航空舰队", "./Subchapter/AirFleet.png", 0.2, 3.0))
-    templates.append(Template("主力舰队", "./Subchapter/MainFleet.png", 0.2, 3.0))
-    templates.append(Template("运输舰队", "./Subchapter/TranFleet.png", 0.2, 3.0))  # old
+    templates.append(Template("BOSS舰队", "./Subchapter/BossFleet.png", 0.2))
+    templates.append(Template("侦查舰队", "./Subchapter/RecFleet.png", 0.2))
+    templates.append(Template("航空舰队", "./Subchapter/AirFleet.png", 0.2))
+    templates.append(Template("主力舰队", "./Subchapter/MainFleet.png", 0.2))
+    templates.append(Template("运输舰队", "./Subchapter/TranFleet.png", 0.2))  # old
     templates.append(Template("出击", "./Subchapter/WeighAnchor.png"))
     templates.append(Template("点击继续", "./Battle/TTC.png"))
     templates.append(Template("点击继续2", "./Battle/TTC2.png"))
@@ -54,10 +53,10 @@ if __name__ == "__main__":
     templates.append(Template("确定", "./Battle/OK.png"))
 
     enemies = []
-    enemies.append(Template("侦查舰队", "./Subchapter/RecFleet.png", 0.2, 3.0))
-    enemies.append(Template("航空舰队", "./Subchapter/AirFleet.png", 0.2, 3.0))
-    enemies.append(Template("主力舰队", "./Subchapter/MainFleet.png", 0.2, 3.0))
-    enemies.append(Template("运输舰队", "./Subchapter/TranFleet.png", 0.2, 3.0))
+    enemies.append(Template("侦查舰队", "./Subchapter/RecFleet.png", 0.2))
+    enemies.append(Template("航空舰队", "./Subchapter/AirFleet.png", 0.2))
+    enemies.append(Template("主力舰队", "./Subchapter/MainFleet.png", 0.2))
+    enemies.append(Template("运输舰队", "./Subchapter/TranFleet.png", 0.2))
 
     random.seed()
     game = Game.Game()
@@ -85,8 +84,6 @@ if __name__ == "__main__":
                 minX, minY, maxX, maxY = 10000.0, 10000.0, 0.0, 0.0
                 for pt in dstPts:
                     # cv2.circle(scene, (int(pt[0]), int(pt[1])), 2, (0, 0, 255))
-                    if pt[0] < 0.0 or pt[1] < 0.0:
-                        continue
                     if pt[0] < minX:
                         minX = pt[0]
                     if pt[1] < minY:
@@ -101,7 +98,7 @@ if __name__ == "__main__":
                 height = maxY - minY
                 maxX = maxX - width
                 maxY = maxY + height * 3.0
-                minX = minX - width * 3.0
+                minX = minX - width * 1.5
                 minY = minY - height * 3.0
                 # print("{0} {1} {2} {3}".format(minX, minY, width, height))
                 target = scene[int(minY):int(maxY), int(minX):int(maxX)]
@@ -131,7 +128,7 @@ if __name__ == "__main__":
                     # x, y = np.mean(dstPts2, axis=0)
                     x2, y2 = dstPts2[random.randint(0, len(dstPts2) - 1)]
                     game.click((int(minX + x2), int(minY + y2)))
-                    time.sleep(enemy.sleep)
+                    time.sleep(1.0)
                     clicked = True
                     print("BOSS被堵塞")
                     break
@@ -141,11 +138,11 @@ if __name__ == "__main__":
                     # x, y = np.mean(dstPts, axis=0)
                     x, y = dstPts[random.randint(0, len(dstPts) - 1)]
                     game.click((int(x), int(y)))
-                    time.sleep(template.sleep)
+                    time.sleep(1.0)
                     break
             else:
                 # x, y = np.mean(dstPts, axis=0)
                 x, y = dstPts[random.randint(0, len(dstPts) - 1)]
                 game.click((int(x), int(y)))
-                time.sleep(template.sleep)
+                time.sleep(1.0)
                 break
