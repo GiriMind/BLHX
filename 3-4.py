@@ -35,14 +35,14 @@ class Template:
 if __name__ == "__main__":
     templates = []
     templates.append(Template("3-4", "./Precombat/3-4.png"))
-    templates.append(Template("立刻前往", "./Precombat/GoNow.png"))
-    templates.append(Template("立刻前往2", "./Precombat/GoNow2.png"))
+    templates.append(Template("立刻前往", "./Precombat/ImmediateStart.png"))
+    templates.append(Template("立刻前往2", "./Precombat/ImmediateStart2.png"))
     templates.append(Template("规避", "./Subchapter/Evade.png"))
     templates.append(Template("BOSS舰队", "./Subchapter/BossFleet.png", 0.2))
     templates.append(Template("侦查舰队", "./Subchapter/RecFleet.png", 0.2))
     templates.append(Template("航空舰队", "./Subchapter/AirFleet.png", 0.2))
     templates.append(Template("主力舰队", "./Subchapter/MainFleet.png", 0.2))
-    templates.append(Template("运输舰队", "./Subchapter/TranFleet.png", 0.2))  # old
+    templates.append(Template("运输舰队", "./Subchapter/TranFleet.png", 0.2))
     templates.append(Template("出击", "./Subchapter/WeighAnchor.png"))
     templates.append(Template("点击继续", "./Battle/TTC.png"))
     templates.append(Template("点击继续2", "./Battle/TTC2.png"))

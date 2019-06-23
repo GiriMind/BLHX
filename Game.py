@@ -29,7 +29,7 @@ class Game:
         #    raise
         if self.window.isMinimized() or self.window.isMaximized():
             self.window.restore()
-        # self.window.setSize(gc.Size(974, 634))
+        # self.window.setSize(gc.Size(1422 + 14, 800 + 94)) # 1422 * 800, 960 * 540
         self.window.foreground()
 
         self.capturer = gc.DesktopCapturer()
