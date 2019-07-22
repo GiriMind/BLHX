@@ -32,7 +32,8 @@ class Game:
         # self.window.setSize(gc.Size(1422 + 14, 800 + 94)) # 1422 * 800, 960 * 540
         self.window.foreground()
 
-        self.capturer = gc.DesktopCapturer()
+        self.d3d = gc.Direct3D()
+        self.capturer = gc.DesktopCapturer(self.d3d)
         self.buffer = gc.Image()
         self.rect = gc.Rect()
         self.input = gc.DesktopInput()
