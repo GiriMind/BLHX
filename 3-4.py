@@ -127,7 +127,7 @@ if __name__ == "__main__":
                     dstPts2 = np.float32([kp2[m.trainIdx].pt for m in good]).reshape(-1, 2)
                     # x, y = np.mean(dstPts2, axis=0)
                     x2, y2 = dstPts2[random.randint(0, len(dstPts2) - 1)]
-                    game.click((int(minX + x2), int(minY + y2)))
+                    game.mouseClick((int(minX + x2), int(minY + y2)))
                     time.sleep(1.0)
                     clicked = True
                     print("BOSS被堵塞")
@@ -137,12 +137,12 @@ if __name__ == "__main__":
                     print("BOSS未堵塞")
                     # x, y = np.mean(dstPts, axis=0)
                     x, y = dstPts[random.randint(0, len(dstPts) - 1)]
-                    game.click((int(x), int(y)))
+                    game.mouseClick((int(x), int(y)))
                     time.sleep(1.0)
                     break
             else:
                 # x, y = np.mean(dstPts, axis=0)
                 x, y = dstPts[random.randint(0, len(dstPts) - 1)]
-                game.click((int(x), int(y)))
+                game.mouseClick((int(x), int(y)))
                 time.sleep(1.0)
                 break
