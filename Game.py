@@ -13,6 +13,15 @@ pyautogui.PAUSE = 2.5
 pyautogui.FAILSAFE = True
 
 
+class Emulator:
+    def __init__(self, name, leftBorder, topBorder, rightBorder, bottomBorder):
+        self.name = name
+        self.leftBorder = leftBorder
+        self.topBorder = topBorder
+        self.rightBorder = rightBorder
+        self.bottomBorder = bottomBorder
+
+
 def EnumFunc(window, lParam):
     windows = lParam
     if win32gui.IsWindowVisible(window):
@@ -21,6 +30,17 @@ def EnumFunc(window, lParam):
 
 class Game:
     def __init__(self):
+        print("模拟器边框列表：")
+        emulators = []
+        emulators.append(Emulator("无边框窗口", 0, 0, 0, 0))
+        emulators.append(Emulator("BlueStacks", 7, 47, 7, 47))
+        emulators.append(Emulator("其他模拟器请到Game.py添加，或者提交Issue/PR", 0, 0, 0, 0))
+        for i in range(len(emulators)):
+            emulator = emulators[i]
+            print("{0}.{1}({2},{3},{4},{5})".format(i + 1, emulator.name, emulator.leftBorder, emulator.topBorder,
+                                                    emulator.rightBorder, emulator.bottomBorder))
+        j = int(input("请输入模拟器边框编号："))
+        self.emulator = emulators[j - 1]
         print("窗口列表：")
         windows = []
         win32gui.EnumWindows(EnumFunc, windows)
@@ -33,18 +53,21 @@ class Game:
         # if win32gui.IsIconic(self.window):  # or win32gui.IsZoomed(self.window):
         # win32gui.ShowWindow(self.window, win32con.SW_RESTORE)
         # 1280 * 720, 960 * 540
-        # win32gui.SetWindowPos(self.window, None, 0, 0, 1280 + 14, 720 + 94, win32con.SWP_NOZORDER | win32con.SWP_NOMOVE)
+        # win32gui.SetWindowPos(self.window, None, 0, 0, 960 + self.emulator.leftBorder + self.emulator.rightBorder,
+        #                      540 + self.emulator.topBorder + self.emulator.bottomBorder,
+        #                      win32con.SWP_NOZORDER | win32con.SWP_NOMOVE)
         # win32gui.SetForegroundWindow(self.window)
 
-        self.capturer = pygc.DesktopCapturer()
+        self.d3d = pygc.Direct3D()
+        self.capturer = pygc.DesktopCapturer(self.d3d)
         self.buffer = pygc.Image()
         self.rect = pygc.Rect()
 
-    def getWindowRect(self):
+    def _getWindowRect(self):
         left, top, right, bottom = win32gui.GetWindowRect(self.window)
         return (left, top, right, bottom)
 
-    def getClientRect(self):
+    def _getClientRect(self):
         left, top, right, bottom = win32gui.GetClientRect(self.window)
         left, top = win32gui.ClientToScreen(self.window, (left, top))
         right, bottom = win32gui.ClientToScreen(self.window, (right, bottom))
@@ -52,15 +75,20 @@ class Game:
 
     def capture(self):
         while True:
-            left, top, right, bottom = self.getWindowRect()
-            # left, top, right, bottom = self.getClientRect()
+            # left, top, right, bottom = self._getWindowRect()
+            left, top, right, bottom = self._getClientRect()
             self.rect.x = left
             self.rect.y = top
             self.rect.width = right - left
             self.rect.height = bottom - top
+            # 裁剪边框
+            self.rect.x += self.emulator.leftBorder
+            self.rect.y += self.emulator.topBorder
+            self.rect.width -= (self.emulator.leftBorder + self.emulator.rightBorder)
+            self.rect.height -= (self.emulator.topBorder + self.emulator.bottomBorder)
             if not self.capturer.capture(self.buffer, self.rect):
                 print("抓图失败：桌面没有变化导致超时，或者窗口位置超出桌面范围。")
-                print("窗口位置：({0},{1})({2},{3})".format(left, top, right, bottom))
+                print("窗口位置：({0},{1})({2},{3})".format(self.rect.x, self.rect.y, self.rect.width, self.rect.height))
                 continue
             return self.buffer.toNdarray()
 

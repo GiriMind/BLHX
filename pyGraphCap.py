@@ -26,6 +26,13 @@ class Image:
         pass
 
 
+class Direct3D:
+    pass
+
+
 class DesktopCapturer:
+    def __init__(self, d3d):
+        pass
+
     def capture(self, image, rect, timeout=17):
         pass
