@@ -18,7 +18,7 @@ flann = cv2.FlannBasedMatcher(indexParams, searchParams)
 
 
 class Template:
-    def __init__(self, name, filename, ratio=0.5):
+    def __init__(self, name, filename, ratio=0.2):
         self.name = name
         self.image = cv2.imread(filename)
         if self.image is None:
@@ -31,23 +31,23 @@ class Template:
 
 if __name__ == "__main__":
     templates = []
+    templates.append(Template("立刻前往", "./Precombat/ImmediateStart.png"))
+    templates.append(Template("立刻前往2", "./Precombat/ImmediateStart2.png"))
     templates.append(Template("3-4", "./Precombat/3-4.png", 0.2))
-    # templates.append(Template("立刻前往", "./Precombat/ImmediateStart.png"))
-    # templates.append(Template("立刻前往2", "./Precombat/ImmediateStart2.png"))
-    # templates.append(Template("规避", "./Subchapter/Evade.png"))
-    # templates.append(Template("BOSS舰队", "./Subchapter/BossFleet.png", 0.2))
-    # templates.append(Template("侦查舰队", "./Subchapter/RecFleet.png", 0.2))
-    # templates.append(Template("航空舰队", "./Subchapter/AirFleet.png", 0.2))
-    # templates.append(Template("主力舰队", "./Subchapter/MainFleet.png", 0.2))
-    # templates.append(Template("运输舰队", "./Subchapter/TranFleet.png", 0.2))
-    # templates.append(Template("出击", "./Subchapter/WeighAnchor.png"))
-    # templates.append(Template("点击继续", "./Battle/TTC.png"))
-    # templates.append(Template("点击继续2", "./Battle/TTC2.png"))
-    # templates.append(Template("点击继续3", "./Battle/TTC3.png"))
-    # templates.append(Template("性能", "./Battle/Performance.png"))
-    # templates.append(Template("确定2", "./Battle/OK2.png"))
-    # templates.append(Template("大获全胜", "./Battle/Victory.png"))
-    # templates.append(Template("确定", "./Battle/OK.png"))
+    templates.append(Template("规避", "./Subchapter/Evade.png"))
+    templates.append(Template("BOSS舰队", "./Subchapter/BossFleet.png", 0.2))
+    templates.append(Template("侦查舰队", "./Subchapter/RecFleet.png", 0.2))
+    templates.append(Template("航空舰队", "./Subchapter/AirFleet.png", 0.2))
+    templates.append(Template("主力舰队", "./Subchapter/MainFleet.png", 0.2))
+    templates.append(Template("运输舰队", "./Subchapter/TranFleet.png", 0.2))
+    templates.append(Template("出击", "./Subchapter/WeighAnchor.png"))
+    templates.append(Template("点击继续", "./Battle/TTC.png"))
+    templates.append(Template("点击继续2", "./Battle/TTC2.png"))
+    templates.append(Template("点击继续3", "./Battle/TTC3.png"))
+    templates.append(Template("性能", "./Battle/Performance.png"))
+    templates.append(Template("确定2", "./Battle/OK2.png"))
+    templates.append(Template("大获全胜", "./Battle/Victory.png"))
+    templates.append(Template("确定", "./Battle/OK.png"))
 
     enemies = []
     enemies.append(Template("侦查舰队", "./Subchapter/RecFleet.png", 0.2))
@@ -72,10 +72,10 @@ if __name__ == "__main__":
             for m, n in matches:
                 if m.distance < n.distance * 0.66:
                     good.append(m)
-            img3 = cv2.drawMatches(template.image, template.kp, scene, kp, good, None)
-            print("{0} {1} {2}".format(len(good), len(template.kp), len(good) / len(template.kp)))
-            cv2.imshow("test", img3)
-            cv2.waitKey(1)
+            # img3 = cv2.drawMatches(template.image, template.kp, scene, kp, good, None)
+            # print("{0} {1} {2}".format(len(good), len(template.kp), len(good) / len(template.kp)))
+            # cv2.imshow("test", img3)
+            # cv2.waitKey(1)
             if len(good) < len(template.kp) * template.ratio:
                 continue
             dstPts = np.float32([kp[m.trainIdx].pt for m in good]).reshape(-1, 2)

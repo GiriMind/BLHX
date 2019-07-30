@@ -4,7 +4,6 @@
 #include <boost/python/numpy.hpp>
 
 #include "GraphCap/DesktopCapturer.h"
-#include "GraphCap/Image.h"
 #include "pyGraphCap/pyImage.h"
 
 namespace pygc
