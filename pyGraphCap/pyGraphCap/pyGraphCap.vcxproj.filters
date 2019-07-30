@@ -1,0 +1,102 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="源文件">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="头文件">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="资源文件">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="头文件\pyGraphCap">
+      <UniqueIdentifier>{5484761b-a18b-4f20-b3ee-d1ecc24939f1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\pyGraphCap">
+      <UniqueIdentifier>{49a20f09-ef8d-4c16-905f-94a31255f02e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\GraphCap">
+      <UniqueIdentifier>{ff9f8c29-fe53-4050-9fe4-2aeea0b61265}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\GraphCap">
+      <UniqueIdentifier>{54074b32-944c-455e-a107-250202d932f1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\Base">
+      <UniqueIdentifier>{00c96079-385e-47d2-a5e4-f7791f277614}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\Base">
+      <UniqueIdentifier>{ad58ce80-13d6-4a2f-badc-64268c33e160}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="include\pyGraphCap\Common.h">
+      <Filter>头文件\pyGraphCap</Filter>
+    </ClInclude>
+    <ClInclude Include="include\pyGraphCap\DllMain.h">
+      <Filter>头文件\pyGraphCap</Filter>
+    </ClInclude>
+    <ClInclude Include="include\pyGraphCap\pyImage.h">
+      <Filter>头文件\pyGraphCap</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Base\Common.h">
+      <Filter>头文件\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Base\Exception.h">
+      <Filter>头文件\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Base\Point.h">
+      <Filter>头文件\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Base\Rect.h">
+      <Filter>头文件\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Base\ScopeGuard.h">
+      <Filter>头文件\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Base\Size.h">
+      <Filter>头文件\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="include\GraphCap\Common.h">
+      <Filter>头文件\GraphCap</Filter>
+    </ClInclude>
+    <ClInclude Include="include\GraphCap\DesktopCapturer.h">
+      <Filter>头文件\GraphCap</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Base\Type.h">
+      <Filter>头文件\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Base\Utils.h">
+      <Filter>头文件\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="include\GraphCap\Image.h">
+      <Filter>头文件\GraphCap</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\pyGraphCap\DllMain.cpp">
+      <Filter>源文件\pyGraphCap</Filter>
+    </ClCompile>
+    <ClCompile Include="src\pyGraphCap\pyGraphCap.cpp">
+      <Filter>源文件\pyGraphCap</Filter>
+    </ClCompile>
+    <ClCompile Include="src\pyGraphCap\pyImage.cpp">
+      <Filter>源文件\pyGraphCap</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Base\Exception.cpp">
+      <Filter>源文件\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="src\GraphCap\DesktopCapturer.cpp">
+      <Filter>源文件\GraphCap</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Base\Utils.cpp">
+      <Filter>源文件\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="src\GraphCap\Image.cpp">
+      <Filter>源文件\GraphCap</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>

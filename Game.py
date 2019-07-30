@@ -9,8 +9,11 @@ sys.path.append(os.path.dirname(__file__))
 
 import pyGraphCap as pygc
 
-pyautogui.PAUSE = 2.5
+pyautogui.PAUSE = 2.0
 pyautogui.FAILSAFE = True
+
+DEFAULT_WIDTH = 960
+DEFAULT_HEIGHT = 540
 
 
 class Emulator:
@@ -32,7 +35,7 @@ class Game:
     def __init__(self):
         print("模拟器边框列表：")
         emulators = []
-        emulators.append(Emulator("无边框窗口", 0, 0, 0, 0))
+        emulators.append(Emulator("无边框", 0, 0, 0, 0))
         emulators.append(Emulator("BlueStacks", 7, 47, 7, 47))
         emulators.append(Emulator("其他模拟器请到Game.py添加，或者提交Issue/PR", 0, 0, 0, 0))
         for i in range(len(emulators)):
@@ -58,8 +61,7 @@ class Game:
         #                      win32con.SWP_NOZORDER | win32con.SWP_NOMOVE)
         # win32gui.SetForegroundWindow(self.window)
 
-        self.d3d = pygc.Direct3D()
-        self.capturer = pygc.DesktopCapturer(self.d3d)
+        self.capturer = pygc.DesktopCapturer()
         self.buffer = pygc.Image()
         self.rect = pygc.Rect()
 
@@ -88,17 +90,23 @@ class Game:
             self.rect.height -= (self.emulator.topBorder + self.emulator.bottomBorder)
             if not self.capturer.capture(self.buffer, self.rect):
                 print("抓图失败：桌面没有变化导致超时，或者窗口位置超出桌面范围。")
-                print("窗口位置：({0},{1})({2},{3})".format(self.rect.x, self.rect.y, self.rect.width, self.rect.height))
+                # print("窗口位置：({0},{1})({2},{3})".format(self.rect.x, self.rect.y, self.rect.width, self.rect.height))
                 continue
             return self.buffer.toNdarray()
+            # scene = self.buffer.toNdarray()
+            # if self.rect.width == DEFAULT_WIDTH and self.rect.height == DEFAULT_HEIGHT:
+            #    return scene
+            # else:
+            #    return cv2.resize(scene, (DEFAULT_WIDTH, DEFAULT_HEIGHT), interpolation=cv2.INTER_CUBIC)
 
     def mouseClick(self, pos, size=None):
-        if size is None:
-            x = self.rect.x + pos[0]
-            y = self.rect.y + pos[1]
-        else:
-            x = self.rect.x + pos[0] + random.randint(0, size[0] - 1)
-            y = self.rect.y + pos[1] + random.randint(0, size[1] - 1)
+        x = self.rect.x + pos[0]
+        y = self.rect.y + pos[1]
+        if size is not None:
+            x += random.randint(0, size[0] - 1)
+            y += random.randint(0, size[1] - 1)
+        # x = x * self.rect.width / DEFAULT_WIDTH
+        # y = y * self.rect.height / DEFAULT_HEIGHT
         pyautogui.click(x, y)
 
 
