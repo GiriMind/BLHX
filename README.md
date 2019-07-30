@@ -17,5 +17,7 @@ Win8 64位或者以上，安装[VC++2017可再发行程序包](https://support.m
 ## 依赖
 
 [boost](https://www.boost.org)<br />
-
-opencv-python opencv-contrib-python pywin32 pyautogui<br />
+opencv-python<br />
+opencv-contrib-python<br />
+pywin32<br />
+pyautogui<br />
