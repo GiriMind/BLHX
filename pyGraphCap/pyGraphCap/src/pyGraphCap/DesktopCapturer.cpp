@@ -1,5 +1,5 @@
-#include "GraphCap/Common.h"
-#include "GraphCap/DesktopCapturer.h"
+#include "pyGraphCap/Common.h"
+#include "pyGraphCap/DesktopCapturer.h"
 
 #include "Base/ScopeGuard.h"
 
@@ -26,13 +26,14 @@ namespace gc
 			D3D_FEATURE_LEVEL_10_1,
 			D3D_FEATURE_LEVEL_10_0,
 			D3D_FEATURE_LEVEL_9_3,
-			D3D_FEATURE_LEVEL_9_2,
-			D3D_FEATURE_LEVEL_9_1
+			//D3D_FEATURE_LEVEL_9_2,
+			//D3D_FEATURE_LEVEL_9_1
 		};
 		UINT numFeatureLevels = _ARRAYSIZE(featureLevels);
 
-		// Create device
 		HRESULT hr;
+
+		// Create device
 		D3D_FEATURE_LEVEL featureLevel;
 		for (UINT driverTypeIndex = 0; driverTypeIndex < numDriverTypes; ++driverTypeIndex)
 		{
@@ -95,9 +96,9 @@ namespace gc
 		if (FAILED(hr))
 			THROW_DIRECTX_HRESULT(hr);
 		ON_SCOPE_EXIT([&]()
-		{
-			m_desktopDupl->ReleaseFrame();
-		});
+			{
+				m_desktopDupl->ReleaseFrame();
+			});
 
 		// QI for IDXGIResource
 		CComPtr<ID3D11Texture2D> acquiredDesktopImage;

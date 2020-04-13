@@ -1,11 +1,11 @@
 #pragma once
 
+#include <d3d11.h>
+#include <atlbase.h>
 #include <boost/python.hpp>
 #include <boost/python/numpy.hpp>
 
-#include "GraphCap/Image.h"
-
-namespace pygc
+namespace gc
 {
 	namespace py = boost::python;
 	namespace np = boost::python::numpy;
@@ -18,14 +18,13 @@ namespace pygc
 		BO_MAXCOUNT
 	};
 
-	class pyImage :
-		public Image
+	class Image
 	{
 	public:
-		pyImage();
+		Image();
 
-		virtual void convertFromD3D11Texture2D(CComPtr<ID3D11DeviceContext> deviceContext,
-			CComPtr<ID3D11Texture2D> texture2D) override;
+		void convertFromD3D11Texture2D(CComPtr<ID3D11DeviceContext> deviceContext,
+			CComPtr<ID3D11Texture2D> texture2D);
 
 		np::ndarray toNdarray();
 

@@ -19,12 +19,6 @@
     <Filter Include="源文件\pyGraphCap">
       <UniqueIdentifier>{49a20f09-ef8d-4c16-905f-94a31255f02e}</UniqueIdentifier>
     </Filter>
-    <Filter Include="头文件\GraphCap">
-      <UniqueIdentifier>{ff9f8c29-fe53-4050-9fe4-2aeea0b61265}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="源文件\GraphCap">
-      <UniqueIdentifier>{54074b32-944c-455e-a107-250202d932f1}</UniqueIdentifier>
-    </Filter>
     <Filter Include="头文件\Base">
       <UniqueIdentifier>{00c96079-385e-47d2-a5e4-f7791f277614}</UniqueIdentifier>
     </Filter>
@@ -33,15 +27,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="include\pyGraphCap\Common.h">
-      <Filter>头文件\pyGraphCap</Filter>
-    </ClInclude>
-    <ClInclude Include="include\pyGraphCap\DllMain.h">
-      <Filter>头文件\pyGraphCap</Filter>
-    </ClInclude>
-    <ClInclude Include="include\pyGraphCap\pyImage.h">
-      <Filter>头文件\pyGraphCap</Filter>
-    </ClInclude>
     <ClInclude Include="include\Base\Common.h">
       <Filter>头文件\Base</Filter>
     </ClInclude>
@@ -60,43 +45,40 @@
     <ClInclude Include="include\Base\Size.h">
       <Filter>头文件\Base</Filter>
     </ClInclude>
-    <ClInclude Include="include\GraphCap\Common.h">
-      <Filter>头文件\GraphCap</Filter>
-    </ClInclude>
-    <ClInclude Include="include\GraphCap\DesktopCapturer.h">
-      <Filter>头文件\GraphCap</Filter>
-    </ClInclude>
     <ClInclude Include="include\Base\Type.h">
       <Filter>头文件\Base</Filter>
     </ClInclude>
     <ClInclude Include="include\Base\Utils.h">
       <Filter>头文件\Base</Filter>
     </ClInclude>
-    <ClInclude Include="include\GraphCap\Image.h">
-      <Filter>头文件\GraphCap</Filter>
+    <ClInclude Include="include\pyGraphCap\Common.h">
+      <Filter>头文件\pyGraphCap</Filter>
+    </ClInclude>
+    <ClInclude Include="include\pyGraphCap\DesktopCapturer.h">
+      <Filter>头文件\pyGraphCap</Filter>
+    </ClInclude>
+    <ClInclude Include="include\pyGraphCap\Image.h">
+      <Filter>头文件\pyGraphCap</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\pyGraphCap\DllMain.cpp">
-      <Filter>源文件\pyGraphCap</Filter>
-    </ClCompile>
-    <ClCompile Include="src\pyGraphCap\pyGraphCap.cpp">
-      <Filter>源文件\pyGraphCap</Filter>
-    </ClCompile>
-    <ClCompile Include="src\pyGraphCap\pyImage.cpp">
-      <Filter>源文件\pyGraphCap</Filter>
-    </ClCompile>
     <ClCompile Include="src\Base\Exception.cpp">
       <Filter>源文件\Base</Filter>
-    </ClCompile>
-    <ClCompile Include="src\GraphCap\DesktopCapturer.cpp">
-      <Filter>源文件\GraphCap</Filter>
     </ClCompile>
     <ClCompile Include="src\Base\Utils.cpp">
       <Filter>源文件\Base</Filter>
     </ClCompile>
-    <ClCompile Include="src\GraphCap\Image.cpp">
-      <Filter>源文件\GraphCap</Filter>
+    <ClCompile Include="src\pyGraphCap\DesktopCapturer.cpp">
+      <Filter>源文件\pyGraphCap</Filter>
+    </ClCompile>
+    <ClCompile Include="src\pyGraphCap\DllMain.cpp">
+      <Filter>源文件\pyGraphCap</Filter>
+    </ClCompile>
+    <ClCompile Include="src\pyGraphCap\Image.cpp">
+      <Filter>源文件\pyGraphCap</Filter>
+    </ClCompile>
+    <ClCompile Include="src\pyGraphCap\pyGraphCap.cpp">
+      <Filter>源文件\pyGraphCap</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -15,20 +15,20 @@
     <ProjectGuid>{7EA34564-BF42-4004-8325-2064449D39CB}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>pyGraphCap</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.17763.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
     <ProjectName>pyGraphCap</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
@@ -56,12 +56,12 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>_DEBUG;PYGRAPHCAP_EXPORTS;_WINDOWS;_USRDLL;BOOST_PYTHON_STATIC_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>.\include;..\..\..\..\Boost\boost_1_70_0;C:\Python37\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.\include;..\..\..\..\Boost\boost_1_72_0;C:\Python38\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
-      <AdditionalLibraryDirectories>..\..\..\..\Boost\boost_1_70_0\lib64-msvc-14.1;C:\Python37\libs;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>..\..\..\..\Boost\boost_1_72_0\lib64-msvc-14.2;C:\Python38\libs;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>d3d11.lib;dxgi.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
@@ -76,14 +76,14 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>NDEBUG;PYGRAPHCAP_EXPORTS;_WINDOWS;_USRDLL;BOOST_PYTHON_STATIC_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>.\include;..\..\..\..\Boost\boost_1_70_0;C:\Python37\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.\include;..\..\..\..\Boost\boost_1_72_0;C:\Python38\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
-      <AdditionalLibraryDirectories>..\..\..\..\Boost\boost_1_70_0\lib64-msvc-14.1;C:\Python37\libs;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>..\..\..\..\Boost\boost_1_72_0\lib64-msvc-14.2;C:\Python38\libs;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>d3d11.lib;dxgi.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalOptions>/PDBALTPATH:%_PDB% %(AdditionalOptions)</AdditionalOptions>
     </Link>
@@ -100,21 +100,17 @@
     <ClInclude Include="include\Base\Size.h" />
     <ClInclude Include="include\Base\Type.h" />
     <ClInclude Include="include\Base\Utils.h" />
-    <ClInclude Include="include\GraphCap\Common.h" />
-    <ClInclude Include="include\GraphCap\DesktopCapturer.h" />
-    <ClInclude Include="include\GraphCap\Image.h" />
     <ClInclude Include="include\pyGraphCap\Common.h" />
-    <ClInclude Include="include\pyGraphCap\DllMain.h" />
-    <ClInclude Include="include\pyGraphCap\pyImage.h" />
+    <ClInclude Include="include\pyGraphCap\DesktopCapturer.h" />
+    <ClInclude Include="include\pyGraphCap\Image.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Base\Exception.cpp" />
     <ClCompile Include="src\Base\Utils.cpp" />
-    <ClCompile Include="src\GraphCap\DesktopCapturer.cpp" />
-    <ClCompile Include="src\GraphCap\Image.cpp" />
+    <ClCompile Include="src\pyGraphCap\DesktopCapturer.cpp" />
     <ClCompile Include="src\pyGraphCap\DllMain.cpp" />
+    <ClCompile Include="src\pyGraphCap\Image.cpp" />
     <ClCompile Include="src\pyGraphCap\pyGraphCap.cpp" />
-    <ClCompile Include="src\pyGraphCap\pyImage.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

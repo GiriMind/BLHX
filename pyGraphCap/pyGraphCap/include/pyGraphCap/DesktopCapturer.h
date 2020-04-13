@@ -6,7 +6,7 @@
 
 #include "Base/Size.h"
 #include "Base/Rect.h"
-#include "GraphCap/Image.h"
+#include "pyGraphCap/Image.h"
 
 namespace gc
 {

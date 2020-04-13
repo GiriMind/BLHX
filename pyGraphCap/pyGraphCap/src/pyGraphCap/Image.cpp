@@ -1,21 +1,21 @@
 #include "pyGraphCap/Common.h"
-#include "pyGraphCap/pyImage.h"
+#include "pyGraphCap/Image.h"
 
 #include "Base/ScopeGuard.h"
 
-namespace pygc
+namespace gc
 {
-	pyImage::pyImage() :
-		m_width(16),
-		m_height(9),
-		m_bpp(4),
+	Image::Image() :
+		m_width(0),
+		m_height(0),
+		m_bpp(0),
 		m_shape(py::make_tuple(m_height, m_width, m_bpp)),
 		m_dtype(np::dtype::get_builtin<uint8_t>()),
 		m_ndarray(np::empty(m_shape, m_dtype))
 	{
 	}
 
-	void pyImage::convertFromD3D11Texture2D(CComPtr<ID3D11DeviceContext> deviceContext,
+	void Image::convertFromD3D11Texture2D(CComPtr<ID3D11DeviceContext> deviceContext,
 		CComPtr<ID3D11Texture2D> texture2D)
 	{
 		D3D11_TEXTURE2D_DESC desc = {};
@@ -32,7 +32,7 @@ namespace pygc
 			break;
 
 		default:
-			THROW_BASE_EXCEPTION(Exception() << err_no(desc.Format) << err_str("Unsupported image format."));
+			THROW_BASE_EXCEPTION(Exception() << err_no(desc.Format) << err_str("Unsupported format."));
 			break;
 		}
 
@@ -52,9 +52,9 @@ namespace pygc
 		if (FAILED(hr))
 			THROW_DIRECTX_HRESULT(hr);
 		ON_SCOPE_EXIT([&]()
-		{
-			deviceContext->Unmap(texture2D, subresource);
-		});
+			{
+				deviceContext->Unmap(texture2D, subresource);
+			});
 
 		byte_t* src = reinterpret_cast<byte_t*>(mapped.pData);
 		byte_t* dst = reinterpret_cast<byte_t*>(m_ndarray.get_data());
@@ -80,7 +80,7 @@ namespace pygc
 		//}
 	}
 
-	np::ndarray pyImage::toNdarray()
+	np::ndarray Image::toNdarray()
 	{
 		return m_ndarray;
 	}

@@ -1,19 +1,20 @@
 #include "pyGraphCap/Common.h"
 
+#include <boost/exception/all.hpp>
 #include <boost/python.hpp>
 #include <boost/python/numpy.hpp>
 
-#include "GraphCap/DesktopCapturer.h"
-#include "pyGraphCap/pyImage.h"
+#include "pyGraphCap/DesktopCapturer.h"
+#include "pyGraphCap/Image.h"
 
-namespace pygc
+namespace gc
 {
 	namespace py = boost::python;
 	namespace np = boost::python::numpy;
 
-	void translator(const boost::exception& e)
+	void Translator(const boost::exception& ex)
 	{
-		std::string what = boost::diagnostic_information(e);
+		std::string what = boost::diagnostic_information(ex);
 		PyErr_SetString(PyExc_RuntimeError, what.c_str());
 	}
 
@@ -24,7 +25,7 @@ namespace pygc
 		Py_Initialize();
 		np::initialize();
 
-		py::register_exception_translator<boost::exception>(translator);
+		py::register_exception_translator<boost::exception>(Translator);
 
 		py::class_<Point>("Point", py::init<>())
 			.def(py::init<Point::value_t, Point::value_t>())
@@ -44,10 +45,8 @@ namespace pygc
 			.def_readwrite("width", &Rect::width)
 			.def_readwrite("height", &Rect::height);
 
-		py::class_<Image, boost::noncopyable>("ImageBase", py::no_init);
-
-		py::class_<pyImage, py::bases<Image>, boost::noncopyable>("Image", py::init<>())
-			.def("toNdarray", &pyImage::toNdarray/*, py::return_internal_reference<>()*/);
+		py::class_<Image, boost::noncopyable>("Image", py::init<>())
+			.def("toNdarray", &Image::toNdarray/*, py::return_internal_reference<>()*/);
 
 		py::class_<DesktopCapturer, boost::noncopyable>("DesktopCapturer", py::init<>())
 			.def("capture", &DesktopCapturer::capture, DesktopCapturer_capture_overloads());
